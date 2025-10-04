@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LogInFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/etUserNameLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="127dp"
+            android:ems="10"
+            android:hint="UserName..."
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etPasswordLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="1dp"
+            android:ems="10"
+            android:hint="Password..."
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="@+id/etUserNameLogIn"
+            app:layout_constraintTop_toBottomOf="@+id/etUserNameLogIn" />
+
+        <Button
+            android:id="@+id/btLogInLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LogIn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tvSignUpLinkLogIn"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:text="SignUp"
+            app:layout_constraintEnd_toEndOf="@+id/btLogInLogIn"
+            app:layout_constraintStart_toStartOf="@+id/btLogInLogIn"
+            app:layout_constraintTop_toBottomOf="@+id/btLogInLogIn" />
+
+        <TextView
+            android:id="@+id/tvForgotPasswordLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="85dp"
+            android:text="Forgot password"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
