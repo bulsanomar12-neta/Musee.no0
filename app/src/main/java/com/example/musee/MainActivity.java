@@ -22,11 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
             return insets;
         });
-        gotoLogInFragment();
     }
 
-    //..@Override
-    //protected void onStart() {}
+    @Override
+    public void onStart() {
+        super.onStart();
+        gotoAddPieceFragment();
+    }
 
     private void gotoLogInFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-
+    private void gotoAddPieceFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new AddPieceFragment());// ادخال من والى
+        ft.commit();
+    }
 
 }

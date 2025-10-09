@@ -8,6 +8,8 @@ public class FirebaseServices {
     private static  FirebaseServices instance;
     private FirebaseAuth auth;
     private FirebaseFirestore fire;
+    private FirebaseStorage storage;
+
 
     public FirebaseServices(){
         auth = FirebaseAuth.getInstance();
@@ -18,8 +20,6 @@ public class FirebaseServices {
     public FirebaseStorage getStorage() {
         return storage;
     }
-
-    private FirebaseStorage storage;
 
     public FirebaseFirestore getFire() {
         return fire;
@@ -35,4 +35,5 @@ public class FirebaseServices {
         }
         return instance ;
     }
+
 }

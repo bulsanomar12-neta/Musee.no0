@@ -2,4 +2,11 @@
     <string name="app_name">Musee</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="types_array">
+        <item>Oil painting</item>
+        <item>pencil drawing</item>
+        <item>digital drawing</item>
+        <item>other..</item>
+    </string-array>
 </resources>

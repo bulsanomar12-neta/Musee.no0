@@ -89,7 +89,7 @@ public class ForgotPasswordFragment extends Fragment {
                             Toast.makeText(getActivity(), "Check your email.", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(getActivity(), "Failed, check the email address!.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Failed, check the email address!.2", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
