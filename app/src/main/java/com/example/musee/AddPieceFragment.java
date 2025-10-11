@@ -85,10 +85,10 @@ public class AddPieceFragment extends Fragment {
 
     private void connectComponents() {
         etIdAddPieceFragment = getView().findViewById(R.id.etIdAddPieceFragment);
+        spCategoryAddPiece = getView().findViewById(R.id.spCategoryAddPiece);
         etArtistAddPieceFragment = getView().findViewById(R.id.etArtistAddPieceFragment);
         etHoursAddPieceFragment = getView().findViewById(R.id.etHoursAddPieceFragment);
         etInformationAddPieceFragment = getView().findViewById(R.id.etInformationAddPieceFragment);
-        spCategoryAddPiece = getView().findViewById(R.id.spCategoryAddPiece);
         fbs = FirebaseServices.getInstance();
         btAddPieceFragment = getView().findViewById(R.id.btAddPieceFragment);
         btAddPieceFragment.setOnClickListener(new View.OnClickListener() {
@@ -96,22 +96,21 @@ public class AddPieceFragment extends Fragment {
             public void onClick(View v) {
                 String id,artist,hours,information,category;
                 id = etIdAddPieceFragment.getText().toString();
+                category = spCategoryAddPiece.getSelectedItem().toString();
                 artist = etArtistAddPieceFragment.getText().toString();
                 hours = etHoursAddPieceFragment.getText().toString();
                 information = etInformationAddPieceFragment.getText().toString();
-                category = spCategoryAddPiece.getSelectedItem().toString();
-
                 if(id.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty()){
                     Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                PieceClass piece = new PieceClass(id,artist,hours,information,category);
+                PieceClass piece = new PieceClass(id,category,artist,hours,information);
 
-                fbs.getFire().collection("PieceClass").add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                fbs.getFire().collection("pieces").add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getActivity(), "congrats.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), "congrats.", Toast.LENGTH_LONG).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
