@@ -28,6 +28,8 @@ public class SignUpFragment extends Fragment {
     private Button btSignUp;
     private  FirebaseServices fbs;
 
+    private UtilsClass uti;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -99,6 +101,7 @@ public class SignUpFragment extends Fragment {
                 fbs.getAuth().createUserWithEmailAndPassword(username , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

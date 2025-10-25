@@ -11,29 +11,57 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/btAddPieceFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="136dp"
+            android:text="Add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgVImageAddPieceFragment"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etIdAddPieceFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="86dp"
+            android:layout_marginBottom="28dp"
+            android:ems="10"
+            android:hint="Art name..."
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/spCategoryAddPiece"
+            app:layout_constraintStart_toStartOf="@+id/spCategoryAddPiece"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
         <EditText
             android:id="@+id/etArtistAddPieceFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
+            android:layout_marginBottom="19dp"
             android:ems="10"
             android:hint="Artist name..."
             android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintBottom_toTopOf="@+id/etHoursAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="@+id/spCategoryAddPiece"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spCategoryAddPiece"
             tools:ignore="MissingConstraints" />
 
         <Spinner
             android:id="@+id/spCategoryAddPiece"
-            android:layout_width="212dp"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="28dp"
+            android:layout_marginBottom="22dp"
             android:entries="@array/types_array"
             app:layout_constraintBottom_toTopOf="@+id/etArtistAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/etHoursAddPieceFragment"
+            app:layout_constraintStart_toStartOf="@+id/etArtistAddPieceFragment"
             app:layout_constraintTop_toBottomOf="@+id/etIdAddPieceFragment"
             tools:ignore="MissingConstraints" />
 
@@ -41,7 +69,8 @@
             android:id="@+id/etHoursAddPieceFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="31dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="30dp"
             android:ems="10"
             android:hint="hours take you to draw.."
             android:inputType="text"
@@ -60,38 +89,27 @@
             android:hint="About the drawing..."
             android:inputType="text"
             android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/btAddPieceFragment"
+            app:layout_constraintBottom_toTopOf="@+id/imgVImageAddPieceFragment"
             app:layout_constraintStart_toStartOf="@+id/etHoursAddPieceFragment"
             app:layout_constraintTop_toBottomOf="@+id/etHoursAddPieceFragment"
             tools:ignore="MissingConstraints" />
 
-        <Button
-            android:id="@+id/btAddPieceFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="216dp"
-            android:text="Add"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/imgVImageAddPieceFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="41dp"
+            android:contentDescription="add pictur"
+            app:layout_constraintBottom_toTopOf="@+id/btAddPieceFragment"
             app:layout_constraintEnd_toEndOf="@+id/etInformationAddPieceFragment"
-            app:layout_constraintStart_toStartOf="@+id/etInformationAddPieceFragment"
+            app:layout_constraintStart_toStartOf="@+id/etArtistAddPieceFragment"
             app:layout_constraintTop_toBottomOf="@+id/etInformationAddPieceFragment"
-            tools:ignore="MissingConstraints" />
+            app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal"
+            tools:ignore="MissingConstraints"
+            tools:src="@tools:sample/avatars" />
 
-        <EditText
-            android:id="@+id/etIdAddPieceFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="32dp"
-            android:ems="10"
-            android:hint="Art name..."
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/spCategoryAddPiece"
-            app:layout_constraintStart_toStartOf="@+id/spCategoryAddPiece"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

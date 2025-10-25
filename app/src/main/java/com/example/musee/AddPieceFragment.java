@@ -1,18 +1,28 @@
 package com.example.musee;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallerLauncher;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,8 +38,18 @@ public class AddPieceFragment extends Fragment {
     private Spinner spCategoryAddPiece;
     private Button btAddPieceFragment;
     private FirebaseServices fbs;
+    private ImageView imgVImageAddPieceFragment;
+    private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode()== Activity.RESULT_OK && result.getData() != null) {
+                    Uri selectedImageUri = result.getData().getData();
+                    imgVImageAddPieceFragment.setImageURI(selectedImageUri);
+                }
+            });
 
-    // TODO: Rename parameter arguments, choose names that match
+
+        // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -37,7 +57,6 @@ public class AddPieceFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public AddPieceFragment() {
         // Required empty public constructor
     }
@@ -73,7 +92,12 @@ public class AddPieceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_piece, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_piece, container, false);
+
+        imgVImageAddPieceFragment = view.findViewById(R.id.imgVImageAddPieceFragment);
+        imgVImageAddPieceFragment.setOnClickListener(v -> openGallery());
+
+        return view;
     }
 
     @Override
@@ -121,5 +145,10 @@ public class AddPieceFragment extends Fragment {
             }
         });
 
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageLauncher.launch(intent);
     }
 }
