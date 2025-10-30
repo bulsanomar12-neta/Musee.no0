@@ -38,13 +38,21 @@ public class AddPieceFragment extends Fragment {
     private Spinner spCategoryAddPiece;
     private Button btAddPieceFragment;
     private FirebaseServices fbs;
+    private UtilsClass utils; // ✅ تمت الإضافة (لرفع الصورة)
+
     private ImageView imgVImageAddPieceFragment;
+
+    private Uri selectedImageUri; // ✅ تمت الإضافة (لتخزين الصورة مؤقتًا)
+
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if(result.getResultCode()== Activity.RESULT_OK && result.getData() != null) {
-                    Uri selectedImageUri = result.getData().getData();
+                    selectedImageUri = result.getData().getData();
                     imgVImageAddPieceFragment.setImageURI(selectedImageUri);
+
+                    // ✅ تمت الإضافة من كود الأستاذ: رفع الصورة بعد اختيارها
+                    utils.uploadImage(getActivity(), selectedImageUri);
                 }
             });
 
@@ -113,7 +121,10 @@ public class AddPieceFragment extends Fragment {
         etArtistAddPieceFragment = getView().findViewById(R.id.etArtistAddPieceFragment);
         etHoursAddPieceFragment = getView().findViewById(R.id.etHoursAddPieceFragment);
         etInformationAddPieceFragment = getView().findViewById(R.id.etInformationAddPieceFragment);
+
+        utils = UtilsClass.getInstance();// ✅ تمت الإضافة من كود الأستاذ
         fbs = FirebaseServices.getInstance();
+
         btAddPieceFragment = getView().findViewById(R.id.btAddPieceFragment);
         btAddPieceFragment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,12 +135,19 @@ public class AddPieceFragment extends Fragment {
                 artist = etArtistAddPieceFragment.getText().toString();
                 hours = etHoursAddPieceFragment.getText().toString();
                 information = etInformationAddPieceFragment.getText().toString();
+
+
                 if(id.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty()){
-                    Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                PieceClass piece = new PieceClass(id,category,artist,hours,information);
+                // ✅ تمت الإضافة من كود الأستاذ: جلب رابط الصورة من FirebaseServices
+                String imageUrl = (fbs.getSelectedImageURL() != null) ? fbs.getSelectedImageURL().toString() : "";
+
+                // ✅ تعديل: تمرير رابط الصورة إلى كائن PieceClass
+                // كان ناقص الصوره
+                PieceClass piece = new PieceClass(id,category,artist,hours,information,imageUrl);
 
                 fbs.getFire().collection("pieces").add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

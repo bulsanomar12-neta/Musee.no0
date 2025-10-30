@@ -55,7 +55,8 @@ public class UtilsClass {
     public void uploadImage(Context context, Uri selectedImageUri) {
         if (selectedImageUri != null) {
             imageStr = "images/" + UUID.randomUUID() + ".jpg"; //+ selectedImageUri.getLastPathSegment();
-            StorageReference imageRef = fbs.getStorage().getReference().child("images/" + selectedImageUri.getLastPathSegment());
+            StorageReference imageRef = fbs.getStorage().getReference().child(imageStr); // انا ضفتها عند الاستاذ السطر الي تحت
+        // StorageReference imageRef = fbs.getStorage().getReference().child("images/" + selectedImageUri.getLastPathSegment());
 
             UploadTask uploadTask = imageRef.putFile(selectedImageUri);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -66,6 +67,7 @@ public class UtilsClass {
                         public void onSuccess(Uri uri) {
                             //selectedImageUri = uri;
                             fbs.setSelectedImageURL(uri);
+                            Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_LONG).show(); // ✅ مضافة هنا
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -73,16 +75,15 @@ public class UtilsClass {
                             Log.e("Utils: uploadImage: ", e.getMessage());
                         }
                     });
-                    Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "88Failed to upload image", Toast.LENGTH_LONG).show();
                 }
             });
         } else {
-            Toast.makeText(context, "Please choose an image first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Please choose an image first", Toast.LENGTH_LONG).show();
         }
     }
 }

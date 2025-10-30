@@ -14,7 +14,6 @@ public class FirebaseServices {
     private Uri selectedImageURL;
 
 
-
     public FirebaseServices(){
         auth = FirebaseAuth.getInstance();
         fire = FirebaseFirestore.getInstance();
