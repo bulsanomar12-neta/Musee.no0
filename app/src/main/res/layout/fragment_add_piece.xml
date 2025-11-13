@@ -106,7 +106,7 @@
             app:layout_constraintEnd_toEndOf="@+id/etInformationAddPieceFragment"
             app:layout_constraintStart_toStartOf="@+id/etArtistAddPieceFragment"
             app:layout_constraintTop_toBottomOf="@+id/etInformationAddPieceFragment"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal"
+            app:srcCompat="@drawable/ic_launcher_background"
             tools:ignore="MissingConstraints"
             tools:src="@tools:sample/avatars" />
 

@@ -1,4 +1,4 @@
-package com.example.musee;
+package com.example.musee.classes;
 
 public class PieceClass {
     private String id;
@@ -8,8 +8,7 @@ public class PieceClass {
     private String information;
     private String photo;
 
-    public PieceClass(String id, String category, String artist, String hours, String information, String imageUrl) {} // constructor فارغ ضروري للـ Firestore
-    public PieceClass(String id,String category,String artistName,String hours,String information){
+    public PieceClass(String id,String category,String artistName,String hours,String information, String photo){
         this.id = id;
         this.category = category;
         this.artistName = artistName;
@@ -23,6 +22,8 @@ public class PieceClass {
     public String getArtistName(){return artistName;}
     public String getHours(){return hours;}
     public  String getInformation(){return information;}
+
+
 
     public String getPhoto(){return photo;}
 

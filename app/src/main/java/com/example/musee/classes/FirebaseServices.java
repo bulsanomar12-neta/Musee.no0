@@ -1,4 +1,4 @@
-package com.example.musee;
+package com.example.musee.classes;
 
 import android.net.Uri;
 

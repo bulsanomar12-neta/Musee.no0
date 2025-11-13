@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallerLauncher;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,11 +20,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
+import com.example.musee.classes.FirebaseServices;
+import com.example.musee.classes.PieceClass;
+import com.example.musee.classes.UtilsClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +40,6 @@ public class AddPieceFragment extends Fragment {
     private UtilsClass utils; // ✅ تمت الإضافة (لرفع الصورة)
 
     private ImageView imgVImageAddPieceFragment;
-
     private Uri selectedImageUri; // ✅ تمت الإضافة (لتخزين الصورة مؤقتًا)
 
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
@@ -65,6 +63,7 @@ public class AddPieceFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
     public AddPieceFragment() {
         // Required empty public constructor
     }
@@ -100,12 +99,7 @@ public class AddPieceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_piece, container, false);
-
-        imgVImageAddPieceFragment = view.findViewById(R.id.imgVImageAddPieceFragment);
-        imgVImageAddPieceFragment.setOnClickListener(v -> openGallery());
-
-        return view;
+        return inflater.inflate(R.layout.fragment_add_piece, container, false);
     }
 
     @Override
@@ -122,6 +116,15 @@ public class AddPieceFragment extends Fragment {
         etHoursAddPieceFragment = getView().findViewById(R.id.etHoursAddPieceFragment);
         etInformationAddPieceFragment = getView().findViewById(R.id.etInformationAddPieceFragment);
 
+        imgVImageAddPieceFragment = getView().findViewById(R.id.imgVImageAddPieceFragment);
+        imgVImageAddPieceFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
+
         utils = UtilsClass.getInstance();// ✅ تمت الإضافة من كود الأستاذ
         fbs = FirebaseServices.getInstance();
 
@@ -136,18 +139,18 @@ public class AddPieceFragment extends Fragment {
                 hours = etHoursAddPieceFragment.getText().toString();
                 information = etInformationAddPieceFragment.getText().toString();
 
+                // ✅ تمت الإضافة من كود الأستاذ: جلب رابط الصورة من FirebaseServices
+                String photo = (fbs.getSelectedImageURL() != null) ? fbs.getSelectedImageURL().toString() : "";
 
                 if(id.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty()){
                     Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // ✅ تمت الإضافة من كود الأستاذ: جلب رابط الصورة من FirebaseServices
-                String imageUrl = (fbs.getSelectedImageURL() != null) ? fbs.getSelectedImageURL().toString() : "";
-
-                // ✅ تعديل: تمرير رابط الصورة إلى كائن PieceClass
+                // ✅ عدلت: تمرير رابط الصورة إلى كائن PieceClass
                 // كان ناقص الصوره
-                PieceClass piece = new PieceClass(id,category,artist,hours,information,imageUrl);
+                PieceClass piece = new PieceClass(id,category,artist,hours,information,"");
+
 
                 fbs.getFire().collection("pieces").add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -157,7 +160,7 @@ public class AddPieceFragment extends Fragment {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                       Toast.makeText(getActivity(), "Something went wrong.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Something went wrong.", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -169,4 +172,5 @@ public class AddPieceFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageLauncher.launch(intent);
     }
+
 }

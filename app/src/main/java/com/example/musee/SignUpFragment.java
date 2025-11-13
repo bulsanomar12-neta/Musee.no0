@@ -1,6 +1,5 @@
 package com.example.musee;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.musee.classes.FirebaseServices;
+import com.example.musee.classes.UtilsClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -26,7 +27,7 @@ public class SignUpFragment extends Fragment {
 
     private EditText etUserName, etPassword;
     private Button btSignUp;
-    private  FirebaseServices fbs;
+    private FirebaseServices fbs;
 
     private UtilsClass uti;
 

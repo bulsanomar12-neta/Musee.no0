@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.musee.classes.FirebaseServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -28,7 +29,7 @@ public class LogInFragment extends Fragment {
     private TextView  tvSignUpLink;
     private TextView tvForgotPasswordLogIn;
     private Button btLogIn;
-    private  FirebaseServices fbs;
+    private FirebaseServices fbs;
 
 
     // TODO: Rename parameter arguments, choose names that match
