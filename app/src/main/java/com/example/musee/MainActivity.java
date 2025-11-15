@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        gotoAddPieceFragment();
+        gotoAdminFragment();
     }
 
     private void gotoLogInFragment() {
@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private void gotoAddPieceFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new AddPieceFragment());// ادخال من والى
+        ft.commit();
+    }
+    private void gotoAdminFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new AdminFragment());// ادخال من والى
         ft.commit();
     }
 

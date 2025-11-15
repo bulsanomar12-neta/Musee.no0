@@ -7,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+//import com.squareup.picasso.Picasso;
 
 import com.example.musee.MainActivity;
 import com.example.musee.R;
@@ -26,7 +25,8 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
     private AllPiecesAdapter.OnItemClickListener itemClickListener;
     private FirebaseServices fbs;
 
-    public AllPiecesAdapter(FragmentActivity activity, ArrayList<PieceClass> pieces) {
+    public AllPiecesAdapter(Context context, ArrayList<PieceClass> pieces) {
+        this.context = context;
         this.allPieces = pieces;
         this.fbs = FirebaseServices.getInstance();
         this.itemClickListener = new OnItemClickListener() {
@@ -46,12 +46,6 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
         } ;
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public MyViewHolder(View v) {
-            super(v);
-        }
-    }
-
     @NonNull
     @Override
     public AllPiecesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,15 +62,20 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
         holder.hoursa.setText(piece.getHours());
        // holder.categorya.setText(piece.getCategory());
         holder.informationa.setText(piece.getInformation());
+        holder.siza.setText(piece.getSize());
+        holder.itemView.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.onItemClick(position);
+        });
 
-
-
+        //if ((piece.getPhoto() == null || piece.getPhoto().isEmpty()){
+            //Picasso.get().load(piece.getPhoto()).into(holder.imga);}
+        //else{
+            //Picasso.get().load(piece.getPhoto()).into(holder.imga);}
     }
 
     @Override
-    public int getItemCount() {
-        super();
-    }
+    public int getItemCount() {return allPieces.size();}
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -85,18 +84,21 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
     public void setOnItemClickListener(AllPiecesAdapter.OnItemClickListener listener) {
         this.itemClickListener = listener;
     }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView ida, artista, hoursa, informationa,categoryab;
-        Spinner categorya;
+        TextView ida, artista, hoursa, informationa,siza;
+       // Spinner categorya;
         ImageView imga;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ida = itemView.findViewById(R.id.etIdAddPieceFragment);
-            artista = itemView.findViewById(R.id.etArtistAddPieceFragment);
-            hoursa = itemView.findViewById(R.id.etHoursAddPieceFragment);
-            categorya = itemView.findViewById(R.id.spCategoryAddPiece);
-            informationa = itemView.findViewById(R.id.etInformationAddPieceFragment);
-            imga = itemView.findViewById(R.id.imgVImageAddPieceFragment);
+            ida = itemView.findViewById(R.id.tvArtNameItem);
+            artista = itemView.findViewById(R.id.tvArtistNameItem);
+            hoursa = itemView.findViewById(R.id.tvHoursItem);
+            //categorya = itemView.findViewById(R.id.spCategoryAddPiece);
+            informationa = itemView.findViewById(R.id.tvInformationItem);
+            imga = itemView.findViewById(R.id.imgItem);
+            siza = itemView.findViewById(R.id.tvSizeItem);
+
 
             //categoryab = categorya..toString;
         }

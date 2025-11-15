@@ -11,6 +11,8 @@ public class FirebaseServices {
     private FirebaseAuth auth;
     private FirebaseFirestore fire;
     private FirebaseStorage storage;
+    private boolean userChangeFlag;
+
     private Uri selectedImageURL;
 
 
@@ -44,5 +46,9 @@ public class FirebaseServices {
             instance = new FirebaseServices();
         }
         return instance ;
+    }
+
+    public void setUserChangeFlag(boolean userChangeFlag) {
+        this.userChangeFlag = userChangeFlag;
     }
 }

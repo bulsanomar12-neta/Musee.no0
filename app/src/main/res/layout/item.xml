@@ -8,7 +8,7 @@
 
     <!-- الصورة -->
     <ImageView
-        android:id="@+id/imgVImageAddPieceFragment"
+        android:id="@+id/imgItem"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
@@ -19,58 +19,58 @@
 
     <!-- الاسم والفئة -->
     <TextView
-        android:id="@+id/tvArtName"
+        android:id="@+id/tvArtNameItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Art name / ID"
         android:textStyle="bold"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/imgVImageAddPieceFragment"
+        app:layout_constraintTop_toBottomOf="@id/imgItem"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvCategory" />
+        app:layout_constraintEnd_toStartOf="@id/tvSizeItem" />
 
     <TextView
-        android:id="@+id/tvCategory"
+        android:id="@+id/tvSizeItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category"
-        android:textStyle="bold"
+        android:text="Size"
         android:textColor="@android:color/darker_gray"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvArtName"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvArtNameItem"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- المعلومات -->
     <TextView
-        android:id="@+id/tvInformation"
+        android:id="@+id/tvInformationItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Information about the drawing..."
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/tvArtName"
+        app:layout_constraintTop_toBottomOf="@id/tvArtNameItem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- اسم الفنان والساعات -->
     <TextView
-        android:id="@+id/tvArtistName"
+        android:id="@+id/tvArtistNameItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Artist name"
         android:textStyle="italic"
         android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/tvInformation"
+        app:layout_constraintTop_toBottomOf="@id/tvInformationItem"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tvHours"
+        android:id="@+id/tvHoursItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hours"
         android:textColor="@android:color/darker_gray"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvArtistName"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvArtistNameItem"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

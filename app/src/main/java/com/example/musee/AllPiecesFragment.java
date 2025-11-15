@@ -93,8 +93,9 @@ public class AllPiecesFragment extends Fragment {
 
     private void init() {
         rvAllPiecesFragment = getView().findViewById(R.id.rvAllPiecesFragment);
+        //ivProfile = getView().findViewById(R.id.ivProfileCarListMapFragment);
         fbs = FirebaseServices.getInstance();
-        //fbs.setUserChangeFlag(false);
+        fbs.setUserChangeFlag(false);
         /*if (fbs.getAuth().getCurrentUser() == null)
             fbs.setCurrentUser(fbs.getCurrentObjectUser()); */
         pieces = new ArrayList<>();
@@ -114,14 +115,14 @@ public class AllPiecesFragment extends Fragment {
                 args.putParcelable("piece", (Parcelable) pieces.get(position)); // or use Parcelable for better performance
                 //CarDetailsFragment cd = new CarDetailsFragment();
                 //cd.setArguments(args);
-                FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 //ft.replace(R.id.frameLayout,cd);
                 ft.commit();
             }
         });
     }
-
     /// /////////////////////
+    ///private void applyFilter(String query) {}
 
     public ArrayList<PieceClass> getPieces()
     {
@@ -155,6 +156,4 @@ public class AllPiecesFragment extends Fragment {
 
         return pieces;
     }
-
-
 }

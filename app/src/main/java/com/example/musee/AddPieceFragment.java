@@ -33,7 +33,7 @@ import com.google.firebase.firestore.DocumentReference;
  * create an instance of this fragment.
  */
 public class AddPieceFragment extends Fragment {
-    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment;
+    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etSizeAddPieceFragment;
     private Spinner spCategoryAddPiece;
     private Button btAddPieceFragment;
     private FirebaseServices fbs;
@@ -115,8 +115,10 @@ public class AddPieceFragment extends Fragment {
         etArtistAddPieceFragment = getView().findViewById(R.id.etArtistAddPieceFragment);
         etHoursAddPieceFragment = getView().findViewById(R.id.etHoursAddPieceFragment);
         etInformationAddPieceFragment = getView().findViewById(R.id.etInformationAddPieceFragment);
+        etSizeAddPieceFragment = getView().findViewById(R.id.etSizeAddPieceFragment);
 
-        imgVImageAddPieceFragment = getView().findViewById(R.id.imgVImageAddPieceFragment);
+
+        imgVImageAddPieceFragment = getView().findViewById(R.id.imgItem);
         imgVImageAddPieceFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,12 +134,14 @@ public class AddPieceFragment extends Fragment {
         btAddPieceFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id,artist,hours,information,category;
+                String id,artist,hours,information,category,size;
                 id = etIdAddPieceFragment.getText().toString();
                 category = spCategoryAddPiece.getSelectedItem().toString();
                 artist = etArtistAddPieceFragment.getText().toString();
                 hours = etHoursAddPieceFragment.getText().toString();
                 information = etInformationAddPieceFragment.getText().toString();
+                size = etSizeAddPieceFragment.getText().toString();
+
 
                 // ✅ تمت الإضافة من كود الأستاذ: جلب رابط الصورة من FirebaseServices
                 String photo = (fbs.getSelectedImageURL() != null) ? fbs.getSelectedImageURL().toString() : "";
@@ -149,7 +153,7 @@ public class AddPieceFragment extends Fragment {
 
                 // ✅ عدلت: تمرير رابط الصورة إلى كائن PieceClass
                 // كان ناقص الصوره
-                PieceClass piece = new PieceClass(id,category,artist,hours,information,"");
+                PieceClass piece = new PieceClass(id,category,artist,hours,size,information,"");
 
 
                 fbs.getFire().collection("pieces").add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
