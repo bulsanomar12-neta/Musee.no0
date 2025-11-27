@@ -99,8 +99,10 @@ public class AllPiecesFragment extends Fragment {
         /*if (fbs.getAuth().getCurrentUser() == null)
             fbs.setCurrentUser(fbs.getCurrentObjectUser()); */
         pieces = new ArrayList<>();
+
         rvAllPiecesFragment.setHasFixedSize(true);
         rvAllPiecesFragment.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         pieces = getPieces();
         myAdapter = new AllPiecesAdapter(getActivity(), pieces);
         filteredList = new ArrayList<>();
@@ -111,8 +113,9 @@ public class AllPiecesFragment extends Fragment {
                 // Handle item click here
                 String selectedItem = pieces.get(position).getArtistName();
                 Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_SHORT).show();
+
                 Bundle args = new Bundle();
-                args.putParcelable("piece", (Parcelable) pieces.get(position)); // or use Parcelable for better performance
+                ///args.putParcelable("piece", (Parcelable) pieces.get(position)); // or use Parcelable for better performance
                 //CarDetailsFragment cd = new CarDetailsFragment();
                 //cd.setArguments(args);
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -121,6 +124,7 @@ public class AllPiecesFragment extends Fragment {
             }
         });
     }
+
     /// /////////////////////
     ///private void applyFilter(String query) {}
 

@@ -17,18 +17,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_launcher_background" />
 
-    <!-- الاسم والفئة -->
+    <!-- الاسم والحجم -->
     <TextView
         android:id="@+id/tvArtNameItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Art name / ID"
-        android:textStyle="bold"
+        android:text="Art name "
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/imgItem"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tvSizeItem"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvSizeItem" />
+        app:layout_constraintTop_toBottomOf="@id/imgItem" />
 
     <TextView
         android:id="@+id/tvSizeItem"
@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- اسم الفنان والساعات -->
+    <!-- اسم الفنان والسطر السفلي -->
     <TextView
         android:id="@+id/tvArtistNameItem"
         android:layout_width="wrap_content"
@@ -71,6 +71,27 @@
         android:text="Hours"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintBaseline_toBaselineOf="@id/tvArtistNameItem"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/tvArtistNameItem"
+        android:layout_marginStart="12dp"/>
+
+    <TextView
+        android:id="@+id/tvCategoryItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:text="Category"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvHoursItem"
+        app:layout_constraintStart_toEndOf="@id/tvHoursItem" />
+
+    <TextView
+        android:id="@+id/tvPriceItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:text="Price $"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvCategoryItem"
+        app:layout_constraintStart_toEndOf="@id/tvCategoryItem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

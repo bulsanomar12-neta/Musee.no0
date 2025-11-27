@@ -9,11 +9,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,14 +36,18 @@ import com.google.firebase.firestore.DocumentReference;
  * create an instance of this fragment.
  */
 public class AddPieceFragment extends Fragment {
-    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etSizeAddPieceFragment;
-    private Spinner spCategoryAddPiece;
+    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etSizeAddPieceFragment,etPriceAddPieceFragment;
+    private static final int GALLERY_REQUEST_CODE = 123;
+
+    Spinner spCategoryAddPiece;
     private Button btAddPieceFragment;
     private FirebaseServices fbs;
     private UtilsClass utils; // ✅ تمت الإضافة (لرفع الصورة)
 
     private ImageView imgVImageAddPieceFragment;
     private Uri selectedImageUri; // ✅ تمت الإضافة (لتخزين الصورة مؤقتًا)
+    private ArrayAdapter<CharSequence> colorAdapter;//<-----------------------------
+
 
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -110,67 +117,97 @@ public class AddPieceFragment extends Fragment {
     }
 
     private void connectComponents() {
+        fbs = FirebaseServices.getInstance();
+        utils = UtilsClass.getInstance();// ✅ تمت الإضافة من كود الأستاذ
+
         etIdAddPieceFragment = getView().findViewById(R.id.etIdAddPieceFragment);
-        spCategoryAddPiece = getView().findViewById(R.id.spCategoryAddPiece);
         etArtistAddPieceFragment = getView().findViewById(R.id.etArtistAddPieceFragment);
         etHoursAddPieceFragment = getView().findViewById(R.id.etHoursAddPieceFragment);
         etInformationAddPieceFragment = getView().findViewById(R.id.etInformationAddPieceFragment);
         etSizeAddPieceFragment = getView().findViewById(R.id.etSizeAddPieceFragment);
+        etPriceAddPieceFragment = getView().findViewById(R.id.etPriceAddPieceFragment);
 
-
+        //button for add piece
+        btAddPieceFragment = getView().findViewById(R.id.btAddPieceFragment);
         imgVImageAddPieceFragment = getView().findViewById(R.id.imgItem);
+
+        spCategoryAddPiece = getView().findViewById(R.id.spCategoryAddPiece);
+
+        btAddPieceFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToFirestore();
+            }
+        });
+
         imgVImageAddPieceFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
             }
         });
-
-
-        utils = UtilsClass.getInstance();// ✅ تمت الإضافة من كود الأستاذ
-        fbs = FirebaseServices.getInstance();
-
-        btAddPieceFragment = getView().findViewById(R.id.btAddPieceFragment);
-        btAddPieceFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String id,artist,hours,information,category,size;
-                id = etIdAddPieceFragment.getText().toString();
-                category = spCategoryAddPiece.getSelectedItem().toString();
-                artist = etArtistAddPieceFragment.getText().toString();
-                hours = etHoursAddPieceFragment.getText().toString();
-                information = etInformationAddPieceFragment.getText().toString();
-                size = etSizeAddPieceFragment.getText().toString();
-
-
-                // ✅ تمت الإضافة من كود الأستاذ: جلب رابط الصورة من FirebaseServices
-                String photo = (fbs.getSelectedImageURL() != null) ? fbs.getSelectedImageURL().toString() : "";
-
-                if(id.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty()){
-                    Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // ✅ عدلت: تمرير رابط الصورة إلى كائن PieceClass
-                // كان ناقص الصوره
-                PieceClass piece = new PieceClass(id,category,artist,hours,size,information,"");
-
-
-                fbs.getFire().collection("pieces").add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(requireContext(), "congrats.", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Something went wrong.", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
+        ((MainActivity)getActivity()).pushFragment(new AddPieceFragment());
 
     }
+
+    private void addToFirestore() {
+        String id,artist,hours,information,category,size,price;
+        id = etIdAddPieceFragment.getText().toString();
+        category = spCategoryAddPiece.getSelectedItem().toString();
+        artist = etArtistAddPieceFragment.getText().toString();
+        hours = etHoursAddPieceFragment.getText().toString();
+        information = etInformationAddPieceFragment.getText().toString();
+        size = etSizeAddPieceFragment.getText().toString();
+        price = etPriceAddPieceFragment.getText().toString();
+
+
+        if(id.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty() || size.trim().isEmpty() || price.trim().isEmpty()){
+            Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        PieceClass piece;
+        if (fbs.getSelectedImageURL() == null) {
+            piece = new PieceClass(id,category,artist,hours,size,information,price,"");
+        }
+        else {
+            piece = new PieceClass(id,category,artist,hours,size,information,price,fbs.getSelectedImageURL().toString());
+        }
+
+        fbs.getFire().collection("pieces")
+                .add(piece).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(requireContext(), "ADD Art is Succeed", Toast.LENGTH_LONG).show();
+                Log.e("addToFirestore() - add to collection: ", "Successful!");
+                gotoAllPieces();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Something went wrong.", Toast.LENGTH_LONG).show();
+            }
+        });
+       /*         catch (Exception ex)
+        {
+            Log.e("AddCarFragment: addToFirestore()", ex.getMessage());
+        }
+        */
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            imgVImageAddPieceFragment.setImageURI(selectedImageUri);/////////////////////////////////
+            utils.uploadImage(getActivity(), selectedImageUri);
+        }
+    }
+    public void gotoAllPieces() {
+
+    FragmentTransaction ft= getActivity().getSupportFragmentManager().beginTransaction();
+    ft.replace(R.id.frameLayOutMain,new AllPiecesFragment());//فقط الاسم مختلف
+    ft.commit();
+   }
 
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

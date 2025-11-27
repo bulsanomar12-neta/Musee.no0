@@ -7,9 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.Stack;
+
 public class MainActivity extends AppCompatActivity {
+    private Stack<Fragment> fragmentStack = new Stack<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new AdminFragment());// ادخال من والى
         ft.commit();
+    }
+
+    public void pushFragment(Fragment fragment) {
+        fragmentStack.push(fragment);
+        /*
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, fragment)
+                .commit(); */
     }
 
 }

@@ -11,9 +11,9 @@ public class FirebaseServices {
     private FirebaseAuth auth;
     private FirebaseFirestore fire;
     private FirebaseStorage storage;
+    private Uri selectedImageURL;
     private boolean userChangeFlag;
 
-    private Uri selectedImageURL;
 
 
     public FirebaseServices(){
