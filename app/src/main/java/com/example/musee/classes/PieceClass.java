@@ -1,6 +1,11 @@
 package com.example.musee.classes;
 
-public class PieceClass {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class PieceClass implements Parcelable {
     private String id;
     private String category;
     private String artistName;
@@ -48,4 +53,19 @@ public class PieceClass {
                 ", photo='" + photo + '\'' +
                 '}';
     }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(artistName);
+        dest.writeString(size);
+        dest.writeString(information);
+        dest.writeString(hours);
+        dest.writeString(category);
+        dest.writeString(price);
+        dest.writeString(photo);
+    }
+
+    @Override
+    public int describeContents() {return 0;}
 }

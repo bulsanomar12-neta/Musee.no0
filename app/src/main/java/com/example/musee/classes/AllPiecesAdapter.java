@@ -1,6 +1,5 @@
 package com.example.musee.classes;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -8,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import com.squareup.picasso.Picasso;
 
 import com.example.musee.MainActivity;
+import com.example.musee.PieceDetailsFragment;
 import com.example.musee.R;
 import com.squareup.picasso.Picasso;
 
@@ -39,11 +38,11 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
                 String selectedItem = filteredList.get(position).getNameCar();
                 Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_SHORT).show(); */
                 Bundle args = new Bundle();
-                //args.putParcelable("piece", (Parcelable) allPieces.get(position)); // or use Parcelable for better performance
-                // CarDetailsFragment cd = new CarDetailsFragment();
-                // cd.setArguments(args);
+                args.putParcelable("pieces", (Parcelable) allPieces.get(position)); // or use Parcelable for better performance
+                PieceDetailsFragment cd = new PieceDetailsFragment();
+                cd.setArguments(args);
                 FragmentTransaction ft= ((MainActivity)context).getSupportFragmentManager().beginTransaction();
-                //ft.replace(R.id.frameLayout,cd);
+                ft.replace(R.id.frameLayOutMain,cd);
                 ft.commit();
             }
         } ;
@@ -67,7 +66,7 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
         holder.siza.setText(piece.getSize());
         holder.informationa.setText(piece.getInformation());
         holder.prica.setText(piece.getPrice());
-        holder.itemView.setOnClickListener(v -> {
+        holder.ida.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onItemClick(position);
         });
@@ -99,14 +98,14 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
         ImageView imga;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ida = itemView.findViewById(R.id.tvArtNameItem);
-            artista = itemView.findViewById(R.id.tvArtistNameItem);
-            hoursa = itemView.findViewById(R.id.tvHoursItem);
-            categorya = itemView.findViewById(R.id.tvCategoryItem);
-            siza = itemView.findViewById(R.id.tvSizeItem);
-            informationa = itemView.findViewById(R.id.tvInformationItem);
-            prica = itemView.findViewById(R.id.tvPriceItem);
-            imga = itemView.findViewById(R.id.imgItem);
+            ida = itemView.findViewById(R.id.tvArtNamePieceItem);
+            artista = itemView.findViewById(R.id.tvArtistNamePieceItem);
+            hoursa = itemView.findViewById(R.id.tvHoursPieceItem);
+            categorya = itemView.findViewById(R.id.tvCategoryPieceItem);
+            siza = itemView.findViewById(R.id.tvSizePieceItem);
+            informationa = itemView.findViewById(R.id.tvInformationPieceItem);
+            prica = itemView.findViewById(R.id.tvPricePieceItem);
+            imga = itemView.findViewById(R.id.imgPieceItem);
         }
     }
 }

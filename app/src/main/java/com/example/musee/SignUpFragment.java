@@ -25,11 +25,11 @@ import com.google.firebase.auth.AuthResult;
  */
 public class SignUpFragment extends Fragment {
 
-    private EditText etUserName, etPassword;
+    private EditText etGmailSignUp, etPasswordSignUp, etConfirmPasswordSignUp, etPhoneNumSignUp, etFirstNameSignUp, etLastNameSignUp, etUserNameSignUp;
     private Button btSignUp;
     private FirebaseServices fbs;
 
-    private UtilsClass uti;
+    private UtilsClass msg;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,22 +84,38 @@ public class SignUpFragment extends Fragment {
         // connecting companions
         // R is class that have all the valls
         fbs = FirebaseServices.getInstance();
-        etUserName = getView().findViewById(R.id.etUserNameSignup);
-        etPassword = getView().findViewById(R.id.etPasswordSignup);
+        etGmailSignUp = getView().findViewById(R.id.etGmailSignUp);
+        etPasswordSignUp = getView().findViewById(R.id.etPasswordSignUp);
+        etConfirmPasswordSignUp = getView().findViewById(R.id.etConfirmPasswordSignUp);
+        etPhoneNumSignUp = getView().findViewById(R.id.tvPhoneNumSignUp);
+        etFirstNameSignUp = getView().findViewById(R.id.etFirstNameSignUp);
+        etLastNameSignUp = getView().findViewById(R.id.etLastNameSignUp);
+        etUserNameSignUp = getView().findViewById(R.id.etUserNameSignUp);
+        msg = UtilsClass.getInstance();
         btSignUp = getActivity().findViewById(R.id.btSignUpSignup);
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Data chick
                 // trim() cut the space
-                String username = etUserName.getText().toString();
-                String password = etUserName.getText().toString();
-                if (username.trim().isEmpty() || password.trim().isEmpty()){
+                String username = etUserNameSignUp.getText().toString().trim();
+                String password = etPasswordSignUp.getText().toString().trim();
+                String confirmPassword = etConfirmPasswordSignUp.getText().toString().trim();
+                String phoneNum = etPhoneNumSignUp.getText().toString().trim();
+                String firstName = etFirstNameSignUp.getText().toString().trim();
+                String lastName = etLastNameSignUp.getText().toString().trim();
+                String gmail = etGmailSignUp.getText().toString().trim();
+                if (username.trim().isEmpty() || password.trim().isEmpty() || confirmPassword.trim().isEmpty() ||
+                        phoneNum.trim().isEmpty() || firstName.trim().isEmpty() || lastName.trim().isEmpty() || gmail.trim().isEmpty()){
                     Toast.makeText(getActivity(), "some fields are empty", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if (!password.equals(confirmPassword)) {
+                    msg.showMessageDialog(getActivity(), "Password are not identical!");
+                    return;
+                }
                 // SignUp
-                fbs.getAuth().createUserWithEmailAndPassword(username , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                fbs.getAuth().createUserWithEmailAndPassword(gmail , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
 

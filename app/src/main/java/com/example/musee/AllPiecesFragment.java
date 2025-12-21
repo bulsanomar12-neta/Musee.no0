@@ -1,9 +1,9 @@
 package com.example.musee;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -112,14 +113,13 @@ public class AllPiecesFragment extends Fragment {
             public void onItemClick(int position) {
                 // Handle item click here
                 String selectedItem = pieces.get(position).getArtistName();
-                Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_LONG).show();
                 Bundle args = new Bundle();
-                ///args.putParcelable("piece", (Parcelable) pieces.get(position)); // or use Parcelable for better performance
-                //CarDetailsFragment cd = new CarDetailsFragment();
-                //cd.setArguments(args);
+                args.putParcelable("pieces", pieces.get(position)); // or use Parcelable for better performance
+                PieceDetailsFragment cd = new PieceDetailsFragment();
+                cd.setArguments(args);
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                //ft.replace(R.id.frameLayout,cd);
+                ft.replace(R.id.frameLayOutMain,cd);
                 ft.commit();
             }
         });
@@ -159,5 +159,12 @@ public class AllPiecesFragment extends Fragment {
         }
 
         return pieces;
+    }
+
+    private void showNoDataDialogue() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("No Results");
+        builder.setMessage("Try again!");
+        builder.show();
     }
 }

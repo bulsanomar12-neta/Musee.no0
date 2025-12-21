@@ -5,6 +5,8 @@
 
     <string-array name="types_array">
         <item>Oil painting</item>
+        <item>acrylic painting</item>
+        <item>watercolor painting</item>
         <item>pencil drawing</item>
         <item>digital drawing</item>
         <item>other..</item>

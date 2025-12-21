@@ -4,45 +4,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FBEFEF"
     tools:context=".SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/etUserNameSignup"
+        <!-- Title -->
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="151dp"
-            android:ems="10"
-            android:hint="UserName..."
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
+            android:layout_marginTop="67dp"
+            android:text="𝕊𝕚𝕘𝕟 𝕌𝕡"
+            android:textColor="#565454"
+            android:textColorLink="#6A4B4B"
+            android:textSize="28sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/etPasswordSignup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="54dp"
-            android:ems="10"
-            android:hint="Password..."
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            app:layout_constraintStart_toStartOf="@+id/etUserNameSignup"
-            app:layout_constraintTop_toBottomOf="@+id/etUserNameSignup" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/btSignUpSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="#433131"
             android:text="SignUp"
+            android:textColorLink="#36372C"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etPasswordSignup" />
+            app:layout_constraintTop_toBottomOf="@+id/etGmailSignUp"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etFirstNameSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:ems="10"
+            android:hint="FirstName..."
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etLastNameSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="LastName..."
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="@+id/etFirstNameSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/etFirstNameSignUp"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etGmailSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="1dp"
+            android:ems="10"
+            android:hint="Gmail"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvPhoneNumSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/tvPhoneNumSignUp"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/tvPhoneNumSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="PhoneNum..."
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="@+id/etConfirmPasswordSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/etConfirmPasswordSignUp"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etConfirmPasswordSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="ConfirmPassword..."
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="@+id/etPasswordSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/etPasswordSignUp"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etPasswordSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="Password..."
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="@+id/etUserNameSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/etUserNameSignUp"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etUserNameSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="Email..."
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="@+id/etLastNameSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/etLastNameSignUp"
+            tools:ignore="MissingConstraints" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

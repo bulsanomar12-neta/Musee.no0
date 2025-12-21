@@ -20,7 +20,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgItem"
+            app:layout_constraintTop_toBottomOf="@+id/imgPieceItem"
             tools:ignore="MissingConstraints" />
 
         <EditText
@@ -96,7 +96,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageView
-            android:id="@+id/imgItem"
+            android:id="@+id/imgPieceItem"
             android:layout_width="230dp"
             android:layout_height="0dp"
             android:layout_marginBottom="21dp"
@@ -133,7 +133,7 @@
             android:hint="Price $"
             android:inputType="text"
             android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/imgItem"
+            app:layout_constraintBottom_toTopOf="@+id/imgPieceItem"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etInformationAddPieceFragment"

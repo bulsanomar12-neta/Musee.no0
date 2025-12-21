@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,11 +42,8 @@ public class AddPieceFragment extends Fragment {
     private Button btAddPieceFragment;
     private FirebaseServices fbs;
     private UtilsClass utils; // ✅ تمت الإضافة (لرفع الصورة)
-
     private ImageView imgVImageAddPieceFragment;
     private Uri selectedImageUri; // ✅ تمت الإضافة (لتخزين الصورة مؤقتًا)
-    private ArrayAdapter<CharSequence> colorAdapter;//<-----------------------------
-
 
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -129,7 +125,7 @@ public class AddPieceFragment extends Fragment {
 
         //button for add piece
         btAddPieceFragment = getView().findViewById(R.id.btAddPieceFragment);
-        imgVImageAddPieceFragment = getView().findViewById(R.id.imgItem);
+        imgVImageAddPieceFragment = getView().findViewById(R.id.imgPieceItem);
 
         spCategoryAddPiece = getView().findViewById(R.id.spCategoryAddPiece);
 
