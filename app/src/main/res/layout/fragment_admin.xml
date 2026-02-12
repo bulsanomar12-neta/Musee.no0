@@ -14,9 +14,10 @@
             android:id="@+id/btGoToAllAdminFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="237dp"
+            android:layout_marginTop="280dp"
             android:text="go to all pieces"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
@@ -31,5 +32,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btGoToAllAdminFragment"
             tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/btSignOutAdminFragmint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="24dp"
+            android:text="Sign Out"
+            app:layout_constraintEnd_toEndOf="@+id/btGoToAddAdminFragmint"
+            app:layout_constraintTop_toBottomOf="@+id/btGoToAddAdminFragmint" />
+
+        <Button
+            android:id="@+id/btEditDetailsAdminFragmint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Details"
+            tools:layout_editor_absoluteX="145dp"
+            tools:layout_editor_absoluteY="196dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

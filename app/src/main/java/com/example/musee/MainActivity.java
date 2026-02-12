@@ -9,12 +9,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.example.musee.classes.FirebaseServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
     private Stack<Fragment> fragmentStack = new Stack<>();
-
+    private FirebaseServices fbs;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +40,43 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        gotoAdminFragment();
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        // Check if user is signed in (non-null).
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // This 'if/else' is the key.
+        if (currentUser == null) {
+            // If no user is logged in, show the login page.
+            gotoLogInFragment();
+        } else {
+            // If a user IS logged in, show the main content page.
+            // This fixes the white screen and the login loop.
+            gotoAdminFragment();
+        }
     }
 
-    private void gotoLogInFragment() {
+    void gotoAllPiecesFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new AllPiecesFragment());
+        ft.commit();
+    }
+
+    public void gotoLogInFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new LogInFragment());// ادخال من والى
         ft.commit();
     }
 
-    private void gotoAddPieceFragment() {
+
+    public void gotoAddPieceFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new AddPieceFragment());// ادخال من والى
         ft.commit();
     }
-    private void gotoAdminFragment() {
+    public void gotoAdminFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new AdminFragment());// ادخال من والى
         ft.commit();
@@ -60,4 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 .commit(); */
     }
 
+    public void gotoEditUserDetailsFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new EditUserDetailsFragment());// ادخال من والى
+        ft.commit();
+    }
 }

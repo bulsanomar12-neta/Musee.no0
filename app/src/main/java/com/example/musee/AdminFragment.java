@@ -1,18 +1,17 @@
 package com.example.musee;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminFragment extends Fragment {
-    private Button btGoToAllAdminFragment, btGoToAddAdminFragmint;
-
+    private Button btGoToAllAdminFragment, btGoToAddAdminFragmint, btSignOutAdminFragmint,btEditDetailsAdminFragmint;
+    // We will initialize mAuth inside onStart
+    private FirebaseAuth mAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,41 +26,58 @@ public class AdminFragment extends Fragment {
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
-        init();
+        init(getView());
     }
 
-    private void init() {
-        // go to Add pieces Fragment
-        btGoToAddAdminFragmint = getView().findViewById(R.id.btGoToAddAdminFragmint);
-        btGoToAddAdminFragmint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoAddPieceFragment();
-            }
+    private void init(View view) {
+        // Get the MainActivity once to call its public navigation methods
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity == null || view == null) { // Also check if the view is null
+            return; // Exit if the activity or view is not available
+        }
+        // Initialize FirebaseAuth here.
+        mAuth = FirebaseAuth.getInstance();
+
+        // Go to Add Piece Fragment
+        btGoToAddAdminFragmint = view.findViewById(R.id.btGoToAddAdminFragmint);
+        btGoToAddAdminFragmint.setOnClickListener(v -> {
+            mainActivity.gotoAddPieceFragment(); // Use MainActivity's method
         });
-        // go to ALL pieces Fragment
-        btGoToAllAdminFragment = getView().findViewById(R.id.btGoToAllAdminFragment);
-        btGoToAllAdminFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    gotoAllPiecesFragment();
-            }
+
+        // Go to ALL Pieces Fragment
+        btGoToAllAdminFragment = view.findViewById(R.id.btGoToAllAdminFragment);
+        btGoToAllAdminFragment.setOnClickListener(v -> {
+            mainActivity.gotoAllPiecesFragment(); // Use MainActivity's method
+        });
+
+        // Sign Out
+        btSignOutAdminFragmint = view.findViewById(R.id.btSignOutAdminFragmint);
+        btSignOutAdminFragmint.setOnClickListener(v -> {
+            // 1. Sign out from Firebase
+            mAuth.signOut();
+            // 2. Navigate back to the login fragment using MainActivity's method
+            mainActivity.gotoLogInFragment();
+        });
+
+        btEditDetailsAdminFragmint = view.findViewById(R.id.btEditDetailsAdminFragmint);
+        btEditDetailsAdminFragmint.setOnClickListener(v -> {
+            mainActivity.gotoEditUserDetailsFragment();
         });
     }
 
 
+    /*
     private void gotoAllPiecesFragment() {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
         ft.replace(R.id.frameLayOutMain, new AllPiecesFragment());// ادخال من والى
         ft.commit();
     }
-
     private void gotoAddPieceFragment() {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
         ft.replace(R.id.frameLayOutMain, new AddPieceFragment());// ادخال من والى
         ft.commit();
     }
+    */
 }

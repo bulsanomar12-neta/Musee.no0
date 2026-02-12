@@ -29,6 +29,29 @@ public class PieceClass implements Parcelable {
         this.photo = photo;
     }
 
+    protected PieceClass(Parcel in) {
+        id = in.readString();
+        category = in.readString();
+        artistName = in.readString();
+        hours = in.readString();
+        size = in.readString();
+        information = in.readString();
+        price = in.readString();
+        photo = in.readString();
+    }
+
+    public static final Creator<PieceClass> CREATOR = new Creator<PieceClass>() {
+        @Override
+        public PieceClass createFromParcel(Parcel in) {
+            return new PieceClass(in);
+        }
+
+        @Override
+        public PieceClass[] newArray(int size) {
+            return new PieceClass[size];
+        }
+    };
+
     public String getId(){return id;}
     public String getCategory(){return category;}
     public String getArtistName(){return artistName;}

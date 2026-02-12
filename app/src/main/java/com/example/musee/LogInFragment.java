@@ -26,7 +26,7 @@ import com.google.firebase.auth.AuthResult;
  */
 public class LogInFragment extends Fragment {
     private EditText etUserName, etPassword;
-    private TextView  tvSignUpLink;
+    private TextView tvSignUpLink;
     private TextView tvForgotPasswordLogIn;
     private Button btLogIn;
     private FirebaseServices fbs;
@@ -89,11 +89,11 @@ public class LogInFragment extends Fragment {
         etPassword = getView().findViewById(R.id.etPasswordLogIn);
         tvSignUpLink = getView().findViewById(R.id.tvSignUpLinkLogIn);
         tvSignUpLink.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              gotoSignUpFragment();//<-------------------------------------------------
-          }
-          });
+            @Override
+            public void onClick(View v) {
+                gotoSignUpFragment();//<-------------------------------------------------
+            }
+        });
         tvForgotPasswordLogIn = getView().findViewById(R.id.tvForgotPasswordLogIn);
         tvForgotPasswordLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,14 +109,15 @@ public class LogInFragment extends Fragment {
                 // trim() cut the space
                 String username = etUserName.getText().toString();
                 String password = etPassword.getText().toString();
-                if (username.trim().isEmpty() || password.trim().isEmpty()){
+                if (username.trim().isEmpty() || password.trim().isEmpty()) {
                     Toast.makeText(getActivity(), "some fields are empty", Toast.LENGTH_LONG).show();
                     return;
                 }
                 // LodIN
-                fbs.getAuth().signInWithEmailAndPassword(username , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                fbs.getAuth().signInWithEmailAndPassword(username, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        gotoAdminFragment();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -127,6 +128,7 @@ public class LogInFragment extends Fragment {
             }
         });
     }
+
     private void gotoSignUpFragment() {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
         ft.replace(R.id.frameLayOutMain, new SignUpFragment());// ادخال من والى
@@ -136,6 +138,18 @@ public class LogInFragment extends Fragment {
     private void gotoForgotPasswordFragment() {
         FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
         ft1.replace(R.id.frameLayOutMain, new ForgotPasswordFragment());// ادخال من والى
+        ft1.commit();
+    }
+
+    private void gotoAdminFragment() {
+        FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
+        ft1.replace(R.id.frameLayOutMain, new AdminFragment());// ادخال من والى
+        ft1.commit();
+    }
+
+    private void gotoEditFragment() {
+        FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
+        ft1.replace(R.id.frameLayOutMain, new EditUserDetailsFragment());// ادخال من والى
         ft1.commit();
     }
 }

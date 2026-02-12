@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditUserDetailsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FBEFEF">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="75dp"
+            android:text="𝔻𝕖𝕥𝕒𝕚𝕝𝕤"
+            android:textColor="#565454"
+            android:textColorLink="#6A4B4B"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/etFirstNameEditUserDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="38dp"
+            android:ems="10"
+            android:hint="FirstName..."
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="@+id/etLastNameEditUserDetails"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <EditText
+            android:id="@+id/etLastNameEditUserDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="2dp"
+            android:ems="10"
+            android:hint="LastName..."
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/etUserNameEditUserDetails2"
+            app:layout_constraintTop_toBottomOf="@+id/etFirstNameEditUserDetails" />
+
+        <EditText
+            android:id="@+id/etUserNameEditUserDetails2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="UserName..."
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etLastNameEditUserDetails" />
+
+        <EditText
+            android:id="@+id/etPhoneNumEditUserDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="2dp"
+            android:ems="10"
+            android:hint="PhoneNum..."
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/etUserNameEditUserDetails2"
+            app:layout_constraintTop_toBottomOf="@+id/etUserNameEditUserDetails2" />
+
+        <Button
+            android:id="@+id/btUpdateEditUserDetails"
+            android:layout_width="207dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="46dp"
+            android:backgroundTint="#6F7F8F"
+            android:text="UPDATE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etAddressEditUserDetails" />
+
+        <EditText
+            android:id="@+id/etAddressEditUserDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:hint="Address..."
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="@+id/etPhoneNumEditUserDetails"
+            app:layout_constraintTop_toBottomOf="@+id/etPhoneNumEditUserDetails" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

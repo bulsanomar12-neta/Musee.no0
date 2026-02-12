@@ -1,22 +1,32 @@
 package com.example.musee;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.musee.classes.FirebaseServices;
+import com.example.musee.classes.User;
 import com.example.musee.classes.UtilsClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
+
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,12 +34,13 @@ import com.google.firebase.auth.AuthResult;
  * create an instance of this fragment.
  */
 public class SignUpFragment extends Fragment {
-
-    private EditText etGmailSignUp, etPasswordSignUp, etConfirmPasswordSignUp, etPhoneNumSignUp, etFirstNameSignUp, etLastNameSignUp, etUserNameSignUp;
+    private static final int GALLERY_REQUEST_CODE = 134;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 123;
+    private EditText etEmailSignUp, etPasswordSignUp, etConfirmPasswordSignUp, etPhoneNumSignUp, etFirstNameSignUp, etLastNameSignUp, etUserNameSignUp, etAddressSignUp;
+    private ImageView imgUserSignUp;
     private Button btSignUp;
     private FirebaseServices fbs;
-
-    private UtilsClass msg;
+    private UtilsClass util;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,49 +95,170 @@ public class SignUpFragment extends Fragment {
         // connecting companions
         // R is class that have all the valls
         fbs = FirebaseServices.getInstance();
-        etGmailSignUp = getView().findViewById(R.id.etGmailSignUp);
+        etUserNameSignUp = getView().findViewById(R.id.etRealUserNameSignUp);
         etPasswordSignUp = getView().findViewById(R.id.etPasswordSignUp);
         etConfirmPasswordSignUp = getView().findViewById(R.id.etConfirmPasswordSignUp);
-        etPhoneNumSignUp = getView().findViewById(R.id.tvPhoneNumSignUp);
+        etPhoneNumSignUp = getView().findViewById(R.id.etPhoneNumSignUp);
         etFirstNameSignUp = getView().findViewById(R.id.etFirstNameSignUp);
         etLastNameSignUp = getView().findViewById(R.id.etLastNameSignUp);
-        etUserNameSignUp = getView().findViewById(R.id.etUserNameSignUp);
-        msg = UtilsClass.getInstance();
+        etEmailSignUp = getView().findViewById(R.id.etEmailSignUp);
+        etAddressSignUp = getView().findViewById(R.id.etAddressSignUp);
+        imgUserSignUp = getView().findViewById(R.id.imgUserSignUp);
+        imgUserSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+        util = UtilsClass.getInstance();
         btSignUp = getActivity().findViewById(R.id.btSignUpSignup);
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Data chick
                 // trim() cut the space
-                String username = etUserNameSignUp.getText().toString().trim();
+                String userName = etUserNameSignUp.getText().toString().trim();
                 String password = etPasswordSignUp.getText().toString().trim();
                 String confirmPassword = etConfirmPasswordSignUp.getText().toString().trim();
                 String phoneNum = etPhoneNumSignUp.getText().toString().trim();
                 String firstName = etFirstNameSignUp.getText().toString().trim();
                 String lastName = etLastNameSignUp.getText().toString().trim();
-                String gmail = etGmailSignUp.getText().toString().trim();
-                if (username.trim().isEmpty() || password.trim().isEmpty() || confirmPassword.trim().isEmpty() ||
-                        phoneNum.trim().isEmpty() || firstName.trim().isEmpty() || lastName.trim().isEmpty() || gmail.trim().isEmpty()){
+                String email = etEmailSignUp.getText().toString().trim();
+                String address = etAddressSignUp.getText().toString().trim();
+                if (userName.trim().isEmpty() || password.trim().isEmpty() || confirmPassword.trim().isEmpty() || phoneNum.trim().isEmpty() ||
+                        firstName.trim().isEmpty() || lastName.trim().isEmpty() || email.trim().isEmpty() || address.trim().isEmpty()){
                     Toast.makeText(getActivity(), "some fields are empty", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    util.showMessageDialog(getActivity(), "Please enter a valid email address");
+                    return;
+                }
+                if (firstName.length() < 3) {
+                    util.showMessageDialog(getActivity(),
+                            "FirstName must be at least 3 letters");
+                    return;
+                }
+                if (lastName.length() < 4) {
+                    util.showMessageDialog(getActivity(),
+                            "LastName must be at least 4 letters");
+                    return;
+                }
+                if (password.length() < 6) {
+                    util.showMessageDialog(getActivity(),
+                            "Password must be at least 6 characters");
+                    return;
+                }
+                if (!password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*")) {
+                    util.showMessageDialog(getActivity(),
+                            "Password must contain at least one number and one capital letter");
+                    return;
+                }
                 if (!password.equals(confirmPassword)) {
-                    msg.showMessageDialog(getActivity(), "Password are not identical!");
+                    util.showMessageDialog(getActivity(), "Password are not identical!");
+                    return;
+                }
+                if (!checkAddressFormat(address)) {
+                    util.showMessageDialog(getActivity(), "Incorrect address format. Delete any " +
+                            "remaining characters. Long click, and app will enter the location for you.");
+                    return;
+                }
+                if (!phoneNum.matches("\\d{10}")) {
+                    util.showMessageDialog(getActivity(), "Phone number must be 10 digits");
                     return;
                 }
                 // SignUp
-                fbs.getAuth().createUserWithEmailAndPassword(gmail , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
+                Uri selectedImageUri = fbs.getSelectedImageURL();
+                String imageURL = "";
+                if (selectedImageUri != null) {
+                    imageURL = selectedImageUri.toString();
+                }
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "something went wrong shick again.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // فحص اذا اسم المستخدم موجود بالفعل
+                fbs.getFire().collection("users")
+                        .whereEqualTo("userName", userName)
+                        .get()
+                        .addOnSuccessListener(querySnapshot -> {
+                            if (!querySnapshot.isEmpty()) {
+                                // الاسم مستخدم بالفعل
+                                util.showMessageDialog(getActivity(), "Username is already taken");
+                                return;
+                            }
+                            // Create a new user
+                            fbs.getAuth().createUserWithEmailAndPassword(email , password)
+                                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+
+                                            User user;
+                                            if (fbs.getSelectedImageURL() != null)
+                                                user = new User(firstName, lastName, userName, phoneNum, address, fbs.getSelectedImageURL().toString());
+                                            else
+                                                user = new User(firstName, lastName, userName, phoneNum, address, "");
+                                            util.showMessageDialog(getActivity(), "User added successfully");
+                                            //أخذ UID الخاص بالمستخدم الجديد
+                                            String uid = authResult.getUser().getUid();
+                                            //حفظ بال firebase
+                                            fbs.getFire().collection("users")
+                                                    .document(uid)
+                                                    .set(user)
+                                                    .addOnSuccessListener(unused -> {
+                                                        //requestLocationPermission(); // ✅ هنا المكان الصحيح
+                                                        gotoAllPieces();
+                                                    });
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getActivity(), "Signup failed, please try again..", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(getActivity(), "Error checking username: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
             }
         });
     }
+
+    public void gotoAllPieces()
+    {
+        FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain,new AllPiecesFragment());
+        ft.commit();
+    }
+
+    private boolean checkAddressFormat(String address) {
+        try {
+            String[] arr = address.split(",");
+            if (Arrays.stream(arr).count() != 2)
+                return false;
+            double lat = Double.parseDouble(arr[0]);
+            double lng = Double.parseDouble(arr[1]);
+            return  true;
+        } catch (NumberFormatException e) {
+            Log.e("SignupFragment: checkAddressFormat: ", "String is not parseable to double.");
+            return false;
+        }
+    }
+
+    public void openGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+    }
+/*
+    private void requestLocationPermission() {
+        if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            startLocationUpdates();
+        } else {
+            EasyPermissions.requestPermissions(
+                    this,
+                    "Location permission is required for this app",
+                    LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            );
+        }
+    }
+
+ */
 }

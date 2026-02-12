@@ -6,139 +6,129 @@
     android:layout_height="match_parent"
     tools:context=".AddPieceFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/etArtistNameAddPieceFragment"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <Button
-            android:id="@+id/btAddPieceFragment"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/etArtistNameAddPieceFragment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="38dp"
-            android:text="Add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgPieceItem"
-            tools:ignore="MissingConstraints" />
+            android:padding="20dp">
 
-        <EditText
-            android:id="@+id/etIdAddPieceFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="69dp"
-            android:layout_marginBottom="18dp"
-            android:ems="10"
-            android:hint="Art name..."
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/spCategoryAddPiece"
-            app:layout_constraintEnd_toEndOf="@+id/spCategoryAddPiece"
-            app:layout_constraintStart_toStartOf="@+id/spCategoryAddPiece"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/tvPageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="𝔸𝕣𝕥𝕨𝕠𝕣𝕜 𝔽𝕠𝕣 𝕊𝕒𝕝𝕖"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/etArtistAddPieceFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:ems="10"
-            android:hint="Artist name..."
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/etHoursAddPieceFragment"
-            app:layout_constraintStart_toStartOf="@+id/spCategoryAddPiece"
-            app:layout_constraintTop_toBottomOf="@+id/spCategoryAddPiece"
-            tools:ignore="MissingConstraints" />
+            <LinearLayout
+                android:id="@+id/cardContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="33dp"
+                android:background="@android:color/white"
+                android:elevation="6dp"
+                android:orientation="vertical"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPageTitle">
 
-        <Spinner
-            android:id="@+id/spCategoryAddPiece"
-            android:layout_width="208dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="22dp"
-            android:entries="@array/types_array"
-            app:layout_constraintBottom_toTopOf="@+id/etArtistAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etIdAddPieceFragment"
-            tools:ignore="MissingConstraints" />
+                <EditText
+                    android:id="@+id/etIdAddPieceFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Art name..."
+                    android:minHeight="42dp" />
 
-        <EditText
-            android:id="@+id/etHoursAddPieceFragment"
-            android:layout_width="208dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="18dp"
-            android:ems="10"
-            android:hint="hours take you to draw.."
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/etSizeAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etArtistAddPieceFragment"
-            tools:ignore="MissingConstraints" />
+                <Spinner
+                    android:id="@+id/spCategoryAddPiece"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/types_array" />
 
-        <EditText
-            android:id="@+id/etInformationAddPieceFragment"
-            android:layout_width="208dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
-            android:ems="10"
-            android:hint="About the drawing..."
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/etPriceAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etSizeAddPieceFragment"
-            tools:ignore="MissingConstraints" />
+                <EditText
+                    android:id="@+id/etArtistAddPieceFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Artist name..."
+                    android:minHeight="42dp" />
 
-        <ImageView
-            android:id="@+id/imgPieceItem"
-            android:layout_width="230dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="21dp"
-            android:contentDescription="add pictur"
-            app:layout_constraintBottom_toTopOf="@+id/btAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etPriceAddPieceFragment"
-            app:srcCompat="@drawable/ic_launcher_background"
-            tools:ignore="MissingConstraints"
-            tools:src="@tools:sample/avatars" />
+                <EditText
+                    android:id="@+id/etHoursAddPieceFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Hours to draw..."
+                    android:inputType="number"
+                    android:minHeight="42dp" />
 
-        <EditText
-            android:id="@+id/etSizeAddPieceFragment"
-            android:layout_width="208dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="22dp"
-            android:ems="10"
-            android:hint="Size"
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/etInformationAddPieceFragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etHoursAddPieceFragment"
-            tools:ignore="MissingConstraints" />
+                <EditText
+                    android:id="@+id/etSizeAddPieceFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Size"
+                    android:minHeight="42dp" />
 
-        <EditText
-            android:id="@+id/etPriceAddPieceFragment"
-            android:layout_width="208dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="17dp"
-            android:ems="10"
-            android:hint="Price $"
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/imgPieceItem"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etInformationAddPieceFragment"
-            tools:ignore="MissingConstraints" />
+                <EditText
+                    android:id="@+id/etInformationAddPieceFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="About the artwork..."
+                    android:minHeight="42dp" />
 
+                <EditText
+                    android:id="@+id/etPriceAddPieceFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Price $"
+                    android:inputType="numberDecimal"
+                    android:minHeight="42dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgPieceItem"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="32dp"
+                android:contentDescription="add picture"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardContainer"
+                app:srcCompat="@drawable/ic_launcher_background" />
+
+            <Button
+                android:id="@+id/btAddPieceFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#564040"
+                android:text="Add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgPieceItem" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 </FrameLayout>

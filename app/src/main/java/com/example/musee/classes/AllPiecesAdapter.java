@@ -61,10 +61,7 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
         //User u = fbs.getCurrentUser();
         holder.ida.setText(piece.getId());
         holder.artista.setText(piece.getArtistName());
-        holder.hoursa.setText(piece.getHours());
-        holder.categorya.setText(piece.getCategory());
         holder.siza.setText(piece.getSize());
-        holder.informationa.setText(piece.getInformation());
         holder.prica.setText(piece.getPrice());
         holder.ida.setOnClickListener(v -> {
             if (itemClickListener != null)
@@ -94,16 +91,13 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView ida, artista, hoursa, informationa,siza,prica,categorya;
+        TextView ida, artista,siza, prica;
         ImageView imga;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ida = itemView.findViewById(R.id.tvArtNamePieceItem);
             artista = itemView.findViewById(R.id.tvArtistNamePieceItem);
-            hoursa = itemView.findViewById(R.id.tvHoursPieceItem);
-            categorya = itemView.findViewById(R.id.tvCategoryPieceItem);
             siza = itemView.findViewById(R.id.tvSizePieceItem);
-            informationa = itemView.findViewById(R.id.tvInformationPieceItem);
             prica = itemView.findViewById(R.id.tvPricePieceItem);
             imga = itemView.findViewById(R.id.imgPieceItem);
         }

@@ -43,6 +43,9 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.recyclerview)
     implementation("com.squareup.picasso:picasso:2.71828")
+//طلب أذونات المستخدم (Permissions) في Android بسهولة.
+//التعامل مع أذونات مثل:الكاميرا-التخزين-الموقع GPS
+    implementation("pub.devrel:easypermissions:3.0.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

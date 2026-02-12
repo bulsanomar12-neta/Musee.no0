@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-///import com.example.wecare.D_FireBase.FirebaseServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
@@ -52,37 +51,30 @@ public class UtilsClass {
         dialog.show();
     }
 
-    public void uploadImage(Context context, Uri selectedImageUri) {
-        if (selectedImageUri != null) {
-            imageStr = "images/" + UUID.randomUUID() + ".jpg"; //+ selectedImageUri.getLastPathSegment();
-            StorageReference imageRef = fbs.getStorage().getReference().child("images/" + selectedImageUri.getLastPathSegment());
-
-            UploadTask uploadTask = imageRef.putFile(selectedImageUri);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            //selectedImageUri = uri;
-                            fbs.setSelectedImageURL(uri);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("Utils: uploadImage: ", e.getMessage());
-                        }
-                    });
-                    Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "88Failed to upload image", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            Toast.makeText(context, "Please choose an image first", Toast.LENGTH_SHORT).show();
-        }
+    // 🌟 تعريف الواجهة
+    public interface OnUploadCompleteListener {
+        void onUploadComplete(Uri uri); // سيرسل رابط الصورة بعد الرفع
     }
+
+    public void uploadImage(Context context, Uri selectedImageUri, OnUploadCompleteListener listener) {
+        StorageReference imageRef = fbs.getStorage().getReference()
+                .child("images/" + UUID.randomUUID().toString() + ".jpg");
+
+        imageRef.putFile(selectedImageUri)
+                .addOnSuccessListener(taskSnapshot ->
+                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            fbs.setSelectedImageURL(uri);
+                            Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+
+                            // استدعاء الـ listener بعد انتهاء الرفع
+                            if(listener != null) {
+                                listener.onUploadComplete(uri);
+                            }
+                        })
+                )
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
 }
