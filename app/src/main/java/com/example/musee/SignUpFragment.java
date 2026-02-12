@@ -41,6 +41,7 @@ public class SignUpFragment extends Fragment {
     private Button btSignUp;
     private FirebaseServices fbs;
     private UtilsClass util;
+    private Uri selectedImage;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,6 +81,10 @@ public class SignUpFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        if (savedInstanceState != null) {
+            selectedImage = savedInstanceState.getParcelable("selectedImage");
+        }
     }
 
     @Override
@@ -104,6 +109,11 @@ public class SignUpFragment extends Fragment {
         etEmailSignUp = getView().findViewById(R.id.etEmailSignUp);
         etAddressSignUp = getView().findViewById(R.id.etAddressSignUp);
         imgUserSignUp = getView().findViewById(R.id.imgUserSignUp);
+        if (selectedImage != null) {
+            imgUserSignUp.setImageURI(selectedImage);
+            fbs.setSelectedImageURL(selectedImage);
+        }
+
         imgUserSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +231,14 @@ public class SignUpFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (selectedImage != null) {
+            outState.putParcelable("selectedImage", selectedImage);
+        }
+    }
+
     public void gotoAllPieces()
     {
         FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
@@ -245,6 +263,17 @@ public class SignUpFragment extends Fragment {
     public void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
+            selectedImage = data.getData();
+            imgUserSignUp.setImageURI(selectedImage);
+            fbs.setSelectedImageURL(selectedImage);
+        }
     }
 /*
     private void requestLocationPermission() {

@@ -35,27 +35,38 @@ public class MainActivity extends AppCompatActivity {
 
             return insets;
         });
+
+        if (savedInstanceState == null) {
+            // Initialize Firebase Auth
+            mAuth = FirebaseAuth.getInstance();
+
+            // Check if user is signed in (non-null).
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            // This 'if/else' is the key.
+            if (currentUser == null) {
+                // If no user is logged in, show the login page.
+                gotoLogInFragment();
+            } else {
+                // If a user IS logged in, show the main content page.
+                // This fixes the white screen and the login loop.
+                gotoAdminFragment();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frameLayOutMain);
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
-        // Check if user is signed in (non-null).
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        // This 'if/else' is the key.
-        if (currentUser == null) {
-            // If no user is logged in, show the login page.
-            gotoLogInFragment();
-        } else {
-            // If a user IS logged in, show the main content page.
-            // This fixes the white screen and the login loop.
-            gotoAdminFragment();
-        }
     }
 
     void gotoAllPiecesFragment() {
