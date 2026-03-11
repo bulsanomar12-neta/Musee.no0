@@ -11,17 +11,32 @@ public class User {
     private String phoneNum;
     private String address;
     private String photo;
+    private String eMail;
     private ArrayList<String> UserPieces;
 
-    public User(String firstName, String lastName, String userName, String phoneNum, String address) {}
+    public User() {}
 
-    public User(String firstName, String lastName, String userName, String phoneNum, String address, String photo) {
+    public User(String firstName, String lastName, String userName,
+                String phoneNum, String address, String eMail) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.phoneNum = phoneNum;
+        this.address = address;
+        this.eMail = eMail;
+        this.photo = ""; // بدون صورة افتراضية
+        this.UserPieces = new ArrayList<>();
+    }
+
+    public User(String firstName, String lastName, String userName,
+                String phoneNum, String address, String photo, String eMail) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.phoneNum = phoneNum;
         this.address = address;
         this.photo = photo;
+        this.eMail = eMail;
         this.UserPieces = new ArrayList<>();
     }
 
@@ -37,6 +52,7 @@ public class User {
                 ", phone='" + phoneNum + '\'' +
                 ", address='" + address + '\'' +
                 ", photo='" + photo + '\'' +
+                ", eMail='" + eMail + '\'' +
                 '}';
     }
 
@@ -60,7 +76,7 @@ public class User {
         return userName;
     }
 
-    public void setUserMame(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -80,6 +96,11 @@ public class User {
         this.address = address;
     }
 
+    public String geteMail() {return eMail;}
+
+    public void seteMail(String eMail) {this.eMail = eMail;}
+
+
     public String getPhoto() {
         return photo;
     }
@@ -87,6 +108,7 @@ public class User {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
 
     public ArrayList<String> getUserPieces() {
         return UserPieces;

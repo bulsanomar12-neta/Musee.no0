@@ -136,10 +136,11 @@ public class AddPieceFragment extends Fragment {
             Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
             return;
         }
-        if (selectedImageUri != null && fbs.getSelectedImageURL() == null) {
+        /*if (selectedImageUri != null && fbs.getSelectedImageURL() == null) {
             Toast.makeText(getActivity(), "Please wait, image is uploading", Toast.LENGTH_SHORT).show();
             return;
         }
+         */
 
         // Check for logged-in user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

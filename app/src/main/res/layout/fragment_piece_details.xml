@@ -207,7 +207,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:backgroundTint="#6F7F8F"
-                        android:text="SMS" />
+                        android:text="l=" />
 
                     <Space
                         android:layout_width="16dp"

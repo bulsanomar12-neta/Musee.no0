@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class FirebaseServices {
     private Uri selectedImageURL;
     private boolean userChangeFlag;
     private ArrayList<User> users;
+    private StorageReference storageRef;
 
 
 
@@ -33,6 +37,7 @@ public class FirebaseServices {
         auth = FirebaseAuth.getInstance();
         fire = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
         users = new ArrayList<>();
         selectedImageURL = null;
     }
@@ -78,57 +83,50 @@ public class FirebaseServices {
         this.users = users;
     }
 
-    public boolean updateUser(User user)
-    {
-        final boolean[] flag = {false};
-        // Reference to the collection
-        String collectionName = "users";
-        String firstNameFieldName = "firstName";
-        String firstNameValue = user.getFirstName();
-        String lastNameFieldName = "lastName";
-        String lastNameValue = user.getLastName();
-        String usernameFieldName = "userName";
-        String usernameValue = user.getUserName();
-        String addressFieldName = "address";
-        String addressValue = user.getAddress();
-        String phoneFieldName = "phoneNum";
-        String phoneValue = user.getPhoneNum();
-        //String photoFieldName = "photo";
-        //String photoValue = user.getPhoto();
 
-        // Create a query for documents based on a specific field
-        Query query = fire.collection(collectionName).
-                whereEqualTo(usernameFieldName, usernameValue);
+    public void updateUser(User user) {
 
-        // Execute the query
-        query.get()
-                .addOnSuccessListener((QuerySnapshot querySnapshot) -> {
-                    for (QueryDocumentSnapshot document : querySnapshot) {
-                        // Get a reference to the document
-                        DocumentReference documentRef = document.getReference();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                        // Update specific fields of the document
-                        documentRef.update(
-                                        firstNameFieldName, firstNameValue,
-                                        lastNameFieldName, lastNameValue,
-                                        usernameFieldName, usernameValue,
-                                        addressFieldName, addressValue,
-                                        phoneFieldName, phoneValue
-                                        //photoFieldName, photoValue
-                                )
-                                .addOnSuccessListener(aVoid -> {
-
-                                    flag[0] = true;
-                                })
-                                .addOnFailureListener(e -> {
-                                    System.err.println("Error updating document: " + e);
-                                });
-                    }
+        fire.collection("users")
+                .document(uid)
+                .update(
+                        "firstName", user.getFirstName(),
+                        "lastName", user.getLastName(),
+                        "userName", user.getUserName(),
+                        "address", user.getAddress(),
+                        "phoneNum", user.getPhoneNum(),
+                        "photo", user.getPhoto(),
+                        "eMail", user.geteMail()
+                )
+                .addOnSuccessListener(aVoid -> {
+                    System.out.println("User updated successfully");
                 })
                 .addOnFailureListener(e -> {
-                    System.err.println("Error getting documents: " + e);
+                    System.err.println("Error updating user: " + e);
                 });
-        return flag[0];
     }
+    public void updateUser(User user,
+                           OnSuccessListener<Void> onSuccess,
+                           OnFailureListener onFailure)
+    {
+        //  استخدامت UID بدل البحث بالـ userName
+        String uid = auth.getCurrentUser().getUid();
 
+        //  حذف الـ Query بالكامل واستخدام document(uid)
+        fire.collection("users")
+                .document(uid)
+                .update(
+                        "firstName", user.getFirstName(),
+                        "lastName", user.getLastName(),
+                        "userName", user.getUserName(),
+                        "address", user.getAddress(),
+                        "phoneNum", user.getPhoneNum(),
+                        "photo", user.getPhoto(),
+                        "eMail", user.geteMail()
+                )
+                //   تمرير success و failure من الخارج
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
+    }
 }

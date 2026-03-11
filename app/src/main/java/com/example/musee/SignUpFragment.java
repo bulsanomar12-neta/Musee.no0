@@ -108,6 +108,7 @@ public class SignUpFragment extends Fragment {
         etLastNameSignUp = getView().findViewById(R.id.etLastNameSignUp);
         etEmailSignUp = getView().findViewById(R.id.etEmailSignUp);
         etAddressSignUp = getView().findViewById(R.id.etAddressSignUp);
+
         imgUserSignUp = getView().findViewById(R.id.imgUserSignUp);
         if (selectedImage != null) {
             imgUserSignUp.setImageURI(selectedImage);
@@ -120,8 +121,9 @@ public class SignUpFragment extends Fragment {
                 openGallery();
             }
         });
+
         util = UtilsClass.getInstance();
-        btSignUp = getActivity().findViewById(R.id.btSignUpSignup);
+        btSignUp = getView().findViewById(R.id.btSignUpSignup);
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,22 +201,28 @@ public class SignUpFragment extends Fragment {
                                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
+                                            // إنشاء كائن المستخدم
+                                            User user = new User(firstName, lastName, userName, phoneNum, address, email);
+                                            //  إضافة الصورة إذا اختارها المستخدم
+                                            String imageURL = "";
+                                            if (fbs.getSelectedImageURL() != null) {
+                                                imageURL = fbs.getSelectedImageURL().toString();
+                                            }
+                                            user.setPhoto(imageURL);
 
-                                            User user;
-                                            if (fbs.getSelectedImageURL() != null)
-                                                user = new User(firstName, lastName, userName, phoneNum, address, fbs.getSelectedImageURL().toString());
-                                            else
-                                                user = new User(firstName, lastName, userName, phoneNum, address, "");
-                                            util.showMessageDialog(getActivity(), "User added successfully");
+
                                             //أخذ UID الخاص بالمستخدم الجديد
                                             String uid = authResult.getUser().getUid();
                                             //حفظ بال firebase
                                             fbs.getFire().collection("users")
-                                                    .document(uid)
+                                                    .document(uid)/// هنا قمت بشيء فريد وهو اعطاء ال Auth وال  FireStore نفس العنوان لكل شخص
                                                     .set(user)
                                                     .addOnSuccessListener(unused -> {
-                                                        //requestLocationPermission(); // ✅ هنا المكان الصحيح
+                                                        //requestLocationPermission(); //  هنا المكان الصحيح
+                                                        util.showMessageDialog(getActivity(), "User added successfully");
                                                         gotoAllPieces();
+                                                        fbs.setSelectedImageURL(null);
+                                                        selectedImage = null;
                                                     });
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -272,7 +280,8 @@ public class SignUpFragment extends Fragment {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
             selectedImage = data.getData();
             imgUserSignUp.setImageURI(selectedImage);
-            fbs.setSelectedImageURL(selectedImage);
+            fbs.setSelectedImageURL(selectedImage); // حفظ الصورة المختارة
+
         }
     }
 /*
