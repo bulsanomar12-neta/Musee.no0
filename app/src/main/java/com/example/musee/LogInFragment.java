@@ -143,7 +143,7 @@ public class LogInFragment extends Fragment {
 
     private void gotoAdminFragment() {
         FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft1.replace(R.id.frameLayOutMain, new AdminFragment());// ادخال من والى
+        ft1.replace(R.id.frameLayOutMain, new UserHomePgFragment());// ادخال من والى
         ft1.commit();
     }
 

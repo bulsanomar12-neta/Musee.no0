@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminFragment">
+    tools:context=".UserHomePgFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/btGoToAllAdminFragment"
+            android:id="@+id/btGoToAllUserHomePgFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="280dp"
@@ -23,32 +23,43 @@
             tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/btGoToAddAdminFragmint"
+            android:id="@+id/btGoToAddUserHomePgFragmint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="114dp"
             android:text="go to add pieces"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btGoToAllAdminFragment"
+            app:layout_constraintTop_toBottomOf="@+id/btGoToAllUserHomePgFragment"
             tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/btSignOutAdminFragmint"
+            android:id="@+id/btSignOutUserHomePgFragmint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
             android:layout_marginEnd="24dp"
             android:text="Sign Out"
-            app:layout_constraintEnd_toEndOf="@+id/btGoToAddAdminFragmint"
-            app:layout_constraintTop_toBottomOf="@+id/btGoToAddAdminFragmint" />
+            app:layout_constraintEnd_toEndOf="@+id/btGoToAddUserHomePgFragmint"
+            app:layout_constraintTop_toBottomOf="@+id/btGoToAddUserHomePgFragmint" />
 
         <Button
-            android:id="@+id/btEditDetailsAdminFragmint"
+            android:id="@+id/btEditDetailsUserHomePgFragmint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit Details"
             tools:layout_editor_absoluteX="145dp"
-            tools:layout_editor_absoluteY="196dp" />
+            tools:layout_editor_absoluteY="196dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/btDeleteAccountUserHomePgFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF4444"
+            android:text="Delete My Account"
+            tools:layout_editor_absoluteX="217dp"
+            tools:layout_editor_absoluteY="26dp"
+            tools:ignore="MissingConstraints" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
