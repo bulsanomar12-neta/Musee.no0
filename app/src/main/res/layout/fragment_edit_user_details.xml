@@ -1,119 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAF9F6"
     tools:context=".EditUserDetailsFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <View
+        android:id="@+id/topHeaderBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FBEFEF">
+        android:layout_height="160dp"
+        android:background="#564040"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="66dp"
-            android:layout_marginBottom="38dp"
-            android:text="𝔻𝕖𝕥𝕒𝕚𝕝𝕤"
-            android:textColor="#565454"
-            android:textColorLink="#6A4B4B"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/etFirstNameEditUserDetails"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+    <ImageButton
+        android:id="@+id/btnBackEditUserDetails"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#FFFFFF" />
 
-        <EditText
-            android:id="@+id/etLastNameEditUserDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="22dp"
-            android:ems="10"
-            android:hint="LastName..."
-            android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/etUserNameEditUserDetails2"
-            app:layout_constraintEnd_toEndOf="@+id/etUserNameEditUserDetails2"
-            app:layout_constraintTop_toBottomOf="@+id/etFirstNameEditUserDetails" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btnBackEditUserDetails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnBackEditUserDetails" />
 
-        <EditText
-            android:id="@+id/etUserNameEditUserDetails2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginBottom="22dp"
-            android:ems="10"
-            android:hint="UserName..."
-            android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/etPhoneNumEditUserDetails"
-            app:layout_constraintStart_toStartOf="@+id/etPhoneNumEditUserDetails"
-            app:layout_constraintTop_toBottomOf="@+id/etLastNameEditUserDetails" />
-
-        <EditText
-            android:id="@+id/etPhoneNumEditUserDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:ems="10"
-            android:hint="PhoneNum..."
-            android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/etAddressEditUserDetails"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etUserNameEditUserDetails2" />
-
-        <EditText
-            android:id="@+id/etAddressEditUserDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:ems="10"
-            android:hint="Address..."
-            android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/imgUserEditUserDetailsFragment"
-            app:layout_constraintStart_toStartOf="@+id/etPhoneNumEditUserDetails"
-            app:layout_constraintTop_toBottomOf="@+id/etPhoneNumEditUserDetails" />
-
-        <EditText
-            android:id="@+id/etFirstNameEditUserDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="22dp"
-            android:ems="10"
-            android:hint="FirstName..."
-            android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/etLastNameEditUserDetails"
-            app:layout_constraintStart_toStartOf="@+id/etLastNameEditUserDetails"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-        <Button
-            android:id="@+id/btUpdateEditUserDetails"
-            android:layout_width="207dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="71dp"
-            android:backgroundTint="#6F7F8F"
-            android:text="UPDATE"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgUserEditUserDetailsFragment" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardUserPhoto"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:cardCornerRadius="60dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/topHeaderBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topHeaderBackground">
 
         <ImageView
             android:id="@+id/imgUserEditUserDetailsFragment"
-            android:layout_width="141dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_launcher_background"
-            app:layout_constraintBottom_toTopOf="@+id/btUpdateEditUserDetails"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etAddressEditUserDetails" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+    </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardUserPhoto">
+
+        <LinearLayout
+            android:id="@+id/fieldsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="30dp">
+
+            <EditText
+                android:id="@+id/etFirstNameEditUserDetails"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:hint="First Name"
+                android:inputType="text"
+                android:paddingStart="12dp" />
+
+            <EditText
+                android:id="@+id/etLastNameEditUserDetails"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:hint="Last Name"
+                android:inputType="text"
+                android:paddingStart="12dp" />
+
+            <EditText
+                android:id="@+id/etUserNameEditUserDetails2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:hint="User Name"
+                android:inputType="text"
+                android:paddingStart="12dp" />
+
+            <EditText
+                android:id="@+id/etPhoneNumEditUserDetails"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:paddingStart="12dp" />
+
+            <EditText
+                android:id="@+id/etAddressEditUserDetails"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:drawable/editbox_background_normal"
+                android:hint="Address"
+                android:inputType="text"
+                android:paddingStart="12dp" />
+
+            <Button
+                android:id="@+id/btUpdateEditUserDetails"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#564040"
+                android:text="SAVE CHANGES"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

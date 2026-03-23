@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/searchFragmentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Search Bar لكتابة اسم اللوحة -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search by piece name"
+        android:inputType="text"
+        android:padding="10dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Spinners للفئة والحجم -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginBottom="8dp">
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:spinnerMode="dropdown"
+            android:layout_marginEnd="4dp" />
+
+        <Spinner
+            android:id="@+id/sizeSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <!-- Min Price و Max Price -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/minPriceEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Min Price"
+            android:inputType="numberDecimal"
+            android:layout_marginEnd="4dp"/>
+
+        <EditText
+            android:id="@+id/maxPriceEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Max Price"
+            android:inputType="numberDecimal"/>
+    </LinearLayout>
+
+    <!-- أزرار البحث والمسح -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- RecyclerView لعرض النتائج -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPieces"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
+
+</LinearLayout>

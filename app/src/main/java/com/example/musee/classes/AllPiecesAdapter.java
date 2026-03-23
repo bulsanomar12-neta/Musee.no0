@@ -37,6 +37,7 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
                 /*
                 String selectedItem = filteredList.get(position).getNameCar();
                 Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_SHORT).show(); */
+                // فتح تفاصيل اللوحة
                 Bundle args = new Bundle();
                 args.putParcelable("pieces", (Parcelable) allPieces.get(position)); // or use Parcelable for better performance
                 PieceDetailsFragment cd = new PieceDetailsFragment();
@@ -63,7 +64,7 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
         holder.artista.setText(piece.getArtistName());
         holder.siza.setText(piece.getSize());
         holder.prica.setText(piece.getPrice());
-        holder.ida.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onItemClick(position);
         });

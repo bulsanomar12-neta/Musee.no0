@@ -12,7 +12,7 @@ public class User {
     private String address;
     private String photo;
     private String eMail;
-    private ArrayList<String> UserPieces;
+    private ArrayList<String> userPieces;
 
     public User() {}
 
@@ -25,7 +25,7 @@ public class User {
         this.address = address;
         this.eMail = eMail;
         this.photo = ""; // بدون صورة افتراضية
-        this.UserPieces = new ArrayList<>();
+        this.userPieces = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String userName,
@@ -37,7 +37,7 @@ public class User {
         this.address = address;
         this.photo = photo;
         this.eMail = eMail;
-        this.UserPieces = new ArrayList<>();
+        this.userPieces = new ArrayList<>();
     }
 
     public User(Parcel in) {
@@ -111,11 +111,12 @@ public class User {
 
 
     public ArrayList<String> getUserPieces() {
-        return UserPieces;
+        return userPieces;
     }
 
     public void setUserPieces(ArrayList<String> userPieces) {
-        this.UserPieces = userPieces;
+        this.userPieces = userPieces;
     }
+
 
 }

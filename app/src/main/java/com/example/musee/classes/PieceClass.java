@@ -14,11 +14,12 @@ public class PieceClass implements Parcelable {
     private String information;
     private  String price;
     private String photo;
+    private String currentUsereMail;
 
     public PieceClass()
     {}
 
-    public PieceClass(String id, String category, String artistName, String hours,String size, String information,String price, String photo){
+    public PieceClass(String id, String category, String artistName, String hours,String size, String information,String price, String photo,String currentUsereMail){
         this.id = id;
         this.category = category;
         this.artistName = artistName;
@@ -27,6 +28,7 @@ public class PieceClass implements Parcelable {
         this.information = information;
         this.price = price;
         this.photo = photo;
+        this.currentUsereMail = currentUsereMail;
     }
 
     protected PieceClass(Parcel in) {
@@ -38,6 +40,7 @@ public class PieceClass implements Parcelable {
         information = in.readString();
         price = in.readString();
         photo = in.readString();
+        currentUsereMail = in.readString();
     }
 
     public static final Creator<PieceClass> CREATOR = new Creator<PieceClass>() {
@@ -60,6 +63,9 @@ public class PieceClass implements Parcelable {
     public  String getInformation(){return information;}
     public String getPrice() {return price;}
     public String getPhoto(){return photo;}
+    public String getCurrentUsereMail() {return currentUsereMail;}
+
+
 
 
 
@@ -74,6 +80,7 @@ public class PieceClass implements Parcelable {
                 ", information='" + information + '\'' +
                 ", price='" + price + '\'' +
                 ", photo='" + photo + '\'' +
+                ", currentUsereMail='" + currentUsereMail + '\'' +
                 '}';
     }
 
@@ -87,6 +94,7 @@ public class PieceClass implements Parcelable {
         dest.writeString(category);
         dest.writeString(price);
         dest.writeString(photo);
+        dest.writeString(currentUsereMail);
     }
 
     @Override

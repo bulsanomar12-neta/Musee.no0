@@ -4,13 +4,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +26,10 @@ import com.google.firebase.auth.AuthResult;
  */
 public class LogInFragment extends Fragment {
     private EditText etUserName, etPassword;
-    private TextView tvSignUpLink;
-    private TextView tvForgotPasswordLogIn;
+    private TextView tvForgotPasswordLogIn,tvSignUpLink;
     private Button btLogIn;
+    private ImageButton btnBackToAllFromLoginFragment;
+
     private FirebaseServices fbs;
 
 
@@ -82,23 +83,29 @@ public class LogInFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        // Get the MainActivity once to call its public navigation methods
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity == null) { // Also check if the view is null
+            return; // Exit if the activity or view is not available
+        }
+
         // connecting companions
         // R is class that have all the valls
         fbs = FirebaseServices.getInstance();
         etUserName = getView().findViewById(R.id.etUserNameLogIn);
         etPassword = getView().findViewById(R.id.etPasswordLogIn);
-        tvSignUpLink = getView().findViewById(R.id.tvSignUpLinkLogIn);
+        tvSignUpLink = getView().findViewById(R.id.tvSignUpLink);
         tvSignUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoSignUpFragment();//<-------------------------------------------------
+                mainActivity.gotoSignUpFragment();//<-------------------------------------------------
             }
         });
-        tvForgotPasswordLogIn = getView().findViewById(R.id.tvForgotPasswordLogIn);
+        tvForgotPasswordLogIn = getView().findViewById(R.id.tvForgotPasswordLogin);
         tvForgotPasswordLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoForgotPasswordFragment();//<---------------------------------------
+                mainActivity.gotoForgotPasswordFragment();
             }
         });
         btLogIn = getActivity().findViewById(R.id.btLogInLogIn);
@@ -116,8 +123,7 @@ public class LogInFragment extends Fragment {
                 // LodIN
                 fbs.getAuth().signInWithEmailAndPassword(username, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
-                    public void onSuccess(AuthResult authResult) {
-                        gotoAdminFragment();
+                    public void onSuccess(AuthResult authResult) {mainActivity.gotoAllPiecesFragment();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -127,29 +133,13 @@ public class LogInFragment extends Fragment {
                 });
             }
         });
+        btnBackToAllFromLoginFragment = getView().findViewById(R.id.btnBackToAllFromLoginFragment);
+        btnBackToAllFromLoginFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.gotoAllPiecesFragment();
+            }
+        });
     }
 
-    private void gotoSignUpFragment() {
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft.replace(R.id.frameLayOutMain, new SignUpFragment());// ادخال من والى
-        ft.commit();
-    }
-
-    private void gotoForgotPasswordFragment() {
-        FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft1.replace(R.id.frameLayOutMain, new ForgotPasswordFragment());// ادخال من والى
-        ft1.commit();
-    }
-
-    private void gotoAdminFragment() {
-        FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft1.replace(R.id.frameLayOutMain, new UserHomePgFragment());// ادخال من والى
-        ft1.commit();
-    }
-
-    private void gotoEditFragment() {
-        FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft1.replace(R.id.frameLayOutMain, new EditUserDetailsFragment());// ادخال من والى
-        ft1.commit();
-    }
 }

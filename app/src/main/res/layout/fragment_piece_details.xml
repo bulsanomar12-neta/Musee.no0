@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FAF9F6">
+
+    <ImageButton
+        android:id="@+id/btnBackFromDetailsToAll"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="10dp"
+        android:src="@android:drawable/ic_menu_revert"
+        android:elevation="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#564040" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -13,219 +28,170 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:paddingHorizontal="20dp"
+            android:paddingTop="80dp"
+            android:paddingBottom="30dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@android:color/white"
-                android:elevation="5dp"
-                android:clipToPadding="false"
-                android:clipToOutline="true"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <!-- الصورة -->
-                <ImageView
-                    android:id="@+id/imgPieceDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="380dp"
-                    android:adjustViewBounds="true"
-                    android:background="#DDDDDD"
-                    android:scaleType="centerCrop"
-                    android:clipToOutline="true" />
-
-                <!-- Art Name -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Art Name"
-                    android:textColor="#777"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tvArtNamePieceDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Art Name"
-                    android:textColor="#000"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <!-- Size -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Size"
-                    android:textColor="#777"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tvSizePieceDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Size"
-                    android:textColor="#444"
-                    android:textSize="16sp" />
-
-                <!-- Price -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Price"
-                    android:textColor="#777"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tvPricePieceDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="#0A7F2E"
-                    android:text="Price"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-
-                <!-- Information -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="22dp"
-                    android:text="Information"
-                    android:textColor="#777"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tvInformationPieceDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Information"
-                    android:textColor="#222"
-                    android:textSize="16sp" />
-
-                <!-- Artist / Hours / Category -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="26dp"
-                    android:weightSum="3">
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
-                    <!-- Artist -->
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Artist"
-                            android:textColor="#777"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:id="@+id/tvArtistNamePieceDetails"
+                        <ImageView
+                            android:id="@+id/imgPieceDetails"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Artist Name"
-                            android:textColor="#444"
-                            android:textSize="16sp" />
-                    </LinearLayout>
+                            android:adjustViewBounds="true"
+                            android:background="#F0EBE8"
+                            android:minHeight="280dp"
+                            android:scaleType="fitCenter" />
+                    </androidx.cardview.widget.CardView>
 
-                    <!-- Hours -->
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tvArtNamePieceDetails"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="serif"
+                        android:text="Starry Night"
+                        android:textColor="#222222"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hours"
-                            android:textColor="#777"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:id="@+id/tvHoursPieceDetails"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hours"
-                            android:textColor="#444"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <!-- Category -->
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tvPricePieceDetails"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="end">
+                        android:layout_marginTop="8dp"
+                        android:background="#684D45"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="6dp"
+                        android:text="$1,200"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Category"
-                            android:textColor="#777"
-                            android:textSize="13sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="#EEEEEE" />
 
-                        <TextView
-                            android:id="@+id/tvCategoryPieceDetails"
-                            android:layout_width="wrap_content"
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2"
+                        android:rowCount="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Category"
-                            android:textColor="#444"
-                            android:textSize="16sp" />
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Artist" android:textColor="#999" android:textSize="12sp" />
+                            <TextView android:id="@+id/tvArtistNamePieceDetails" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Artist Name" android:textColor="#684D45" android:textSize="14sp" android:textStyle="italic" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Size" android:textColor="#999" android:textSize="12sp" />
+                            <TextView android:id="@+id/tvSizePieceDetails" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="60x80 cm" android:textColor="#444" android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Category" android:textColor="#999" android:textSize="12sp" />
+                            <TextView android:id="@+id/tvCategoryPieceDetails" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Oil Painting" android:textColor="#444" android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Creation Hours" android:textColor="#999" android:textSize="12sp" />
+                            <TextView android:id="@+id/tvHoursPieceDetails" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="45 Hours" android:textColor="#444" android:textSize="14sp" />
+                        </LinearLayout>
+                    </GridLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="About this piece"
+                        android:textColor="#222"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvInformationPieceDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="5dp"
+                        android:text="Information about the artwork..."
+                        android:textColor="#666"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btAddtocartlPieceDetailsFragment"
+                            android:layout_width="0dp"
+                            android:layout_height="55dp"
+                            android:layout_weight="1.2"
+                            android:backgroundTint="#8D6E63"
+                            android:text="Add to Cart"
+                            android:textAllCaps="false"
+                            app:cornerRadius="12dp"
+                            app:icon="@android:drawable/ic_menu_add" />
+
+                        <Space
+                            android:layout_width="12dp"
+                            android:layout_height="wrap_content" />
+
+                        <Button
+                            android:id="@+id/btEmailPieceDetailsFragment"
+                            android:layout_width="0dp"
+                            android:layout_height="55dp"
+                            android:layout_weight="0.8"
+                            android:backgroundTint="#684D45"
+                            android:text="Inquire"
+                            android:textAllCaps="false"
+                            app:cornerRadius="12dp" />
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <!-- Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    android:weightSum="2">
-
-                    <Button
-                        android:id="@+id/btSMSDetails"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:backgroundTint="#6F7F8F"
-                        android:text="l=" />
-
-                    <Space
-                        android:layout_width="16dp"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:id="@+id/btEmailDetails"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:backgroundTint="#6F559E"
-                        android:text="Email" />
-                </LinearLayout>
-
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

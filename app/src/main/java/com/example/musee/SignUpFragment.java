@@ -170,11 +170,6 @@ public class SignUpFragment extends Fragment {
                     util.showMessageDialog(getActivity(), "Password are not identical!");
                     return;
                 }
-                if (!checkAddressFormat(address)) {
-                    util.showMessageDialog(getActivity(), "Incorrect address format. Delete any " +
-                            "remaining characters. Long click, and app will enter the location for you.");
-                    return;
-                }
                 if (!phoneNum.matches("\\d{10}")) {
                     util.showMessageDialog(getActivity(), "Phone number must be 10 digits");
                     return;
@@ -254,20 +249,6 @@ public class SignUpFragment extends Fragment {
         ft.commit();
     }
 
-    private boolean checkAddressFormat(String address) {
-        try {
-            String[] arr = address.split(",");
-            if (Arrays.stream(arr).count() != 2)
-                return false;
-            double lat = Double.parseDouble(arr[0]);
-            double lng = Double.parseDouble(arr[1]);
-            return  true;
-        } catch (NumberFormatException e) {
-            Log.e("SignupFragment: checkAddressFormat: ", "String is not parseable to double.");
-            return false;
-        }
-    }
-
     public void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
@@ -284,19 +265,4 @@ public class SignUpFragment extends Fragment {
 
         }
     }
-/*
-    private void requestLocationPermission() {
-        if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            startLocationUpdates();
-        } else {
-            EasyPermissions.requestPermissions(
-                    this,
-                    "Location permission is required for this app",
-                    LOCATION_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            );
-        }
-    }
-
- */
 }

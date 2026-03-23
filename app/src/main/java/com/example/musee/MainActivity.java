@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
             // This 'if/else' is the key.
             if (currentUser == null) {
                 // If no user is logged in, show the login page.
-                gotoLogInFragment();
+                gotoAllPiecesFragment();
             } else {
                 // If a user IS logged in, show the main content page.
                 // This fixes the white screen and the login loop.
-                gotoUserHomePgFragment();
+                gotoAllPiecesFragment();
             }
         }
     }
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    void gotoAllPiecesFragment() {
+    public void gotoAllPiecesFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new AllPiecesFragment());
         ft.commit();
@@ -80,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    public void gotoSignUpFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
+        ft.replace(R.id.frameLayOutMain, new SignUpFragment());// ادخال من والى
+        ft.commit();
+    }
 
     public void gotoAddPieceFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -92,17 +97,19 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void pushFragment(Fragment fragment) {
-        fragmentStack.push(fragment);
-        /*
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout, fragment)
-                .commit(); */
-    }
-
     public void gotoEditUserDetailsFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayOutMain, new EditUserDetailsFragment());// ادخال من والى
+        ft.commit();
+    }
+    public void gotoForgotPasswordFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new ForgotPasswordFragment());// ادخال من والى
+        ft.commit();
+    }
+    public void gotoSearchFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new SearchPieceFragment());// ادخال من والى
         ft.commit();
     }
 }

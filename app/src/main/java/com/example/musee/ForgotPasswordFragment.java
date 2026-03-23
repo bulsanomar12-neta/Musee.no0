@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musee.classes.FirebaseServices;
@@ -26,6 +28,8 @@ public class ForgotPasswordFragment extends Fragment {
     private FirebaseServices fbs;
     private EditText etMailForgotP;
     private Button btForgotP;
+    private ImageButton tvBackToLoginForgorPasswordFragment;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +80,8 @@ public class ForgotPasswordFragment extends Fragment {
 
     @Override
     public void onStart(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity == null) {return;}
         super.onStart();
         fbs = FirebaseServices.getInstance();
         etMailForgotP = getView().findViewById(R.id.etMailForgotP);
@@ -87,13 +93,20 @@ public class ForgotPasswordFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(getActivity(), "Check your email.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Check your email in google messages.", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(getActivity(), "Failed, check the email address!.2", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+            }
+        });
+        tvBackToLoginForgorPasswordFragment = getView().findViewById(R.id.tvBackToLoginForgorPasswordFragment);
+        tvBackToLoginForgorPasswordFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.gotoLogInFragment();
             }
         });
     }

@@ -1,149 +1,189 @@
 package com.example.musee;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import android.app.AlertDialog;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.example.musee.classes.AllPiecesAdapter;
+import com.example.musee.classes.PieceClass;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserHomePgFragment extends Fragment {
-    private Button btGoToAllUserHomePgFragment, btGoToAddUserHomePgFragmint, btSignOutUserHomePgFragmint,btEditDetailsUserHomePgFragmint, btDeleteAccountUserHomePgFragment;
-    // We will initialize mAuth inside onStart
+
+    private Button btGoToAllUserHomePgFragment;
+    private MaterialButton btGoToAddUserHomePgFragmint;
+    private View btEditDetailsUserHomePgFragmint;
+    private ImageView imgMenuOptions, imgUserHome;
     private FirebaseAuth mAuth;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    /// الاضافة الخاصة بعرض اللوحات التي انشأها المستخدم
+    private RecyclerView rvUserPieces;
+    private AllPiecesAdapter userPiecesAdapter;
+    private ArrayList<PieceClass> userPiecesList; // القائمة الخاصة بالمستخدم
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // تأكدي أن اسم الملف هنا مطابق لملف الـ XML الجديد (fragment_user_home)
         return inflater.inflate(R.layout.fragment_user_homepg, container, false);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        init(getView());
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init(view);
     }
 
     private void init(View view) {
-        // Get the MainActivity once to call its public navigation methods
         MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity == null || view == null) { // Also check if the view is null
-            return; // Exit if the activity or view is not available
-        }
-        // Initialize FirebaseAuth here.
+        if (mainActivity == null || view == null) return;
+
         mAuth = FirebaseAuth.getInstance();
 
-        // Go to Add Piece Fragment
-        btGoToAddUserHomePgFragmint = view.findViewById(R.id.btGoToAddUserHomePgFragmint);
-        btGoToAddUserHomePgFragmint.setOnClickListener(v -> {
-            mainActivity.gotoAddPieceFragment(); // Use MainActivity's method
-        });
-
-        // Go to ALL Pieces Fragment
+        imgMenuOptions = view.findViewById(R.id.imgMenuOptions);
+        imgUserHome = view.findViewById(R.id.imgUserHome);
         btGoToAllUserHomePgFragment = view.findViewById(R.id.btGoToAllUserHomePgFragment);
-        btGoToAllUserHomePgFragment.setOnClickListener(v -> {
-            mainActivity.gotoAllPiecesFragment(); // Use MainActivity's method
-        });
-
-        // Sign Out
-        btSignOutUserHomePgFragmint = view.findViewById(R.id.btSignOutUserHomePgFragmint);
-        btSignOutUserHomePgFragmint.setOnClickListener(v -> {
-            // 1. Sign out from Firebase
-            mAuth.signOut();
-            // 2. Navigate back to the login fragment using MainActivity's method
-            mainActivity.gotoLogInFragment();
-        });
-
+        btGoToAddUserHomePgFragmint = view.findViewById(R.id.btGoToAddUserHomePgFragmint);
         btEditDetailsUserHomePgFragmint = view.findViewById(R.id.btEditDetailsUserHomePgFragmint);
-        btEditDetailsUserHomePgFragmint.setOnClickListener(v -> {
-            mainActivity.gotoEditUserDetailsFragment();
-        });
 
-        btDeleteAccountUserHomePgFragment = view.findViewById(R.id.btDeleteAccountUserHomePgFragment);
+        ///  ربط عرض اللوحات//////////////////////////////////////////////////
+        rvUserPieces = view.findViewById(R.id.rvUserPiecesHomePgFragment);
 
-        btDeleteAccountUserHomePgFragment.setOnClickListener(v -> {
+        // إعداد الـ RecyclerView أفقي
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        rvUserPieces.setLayoutManager(layoutManager);
 
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Delete Account")
-                    .setMessage("Are you sure you want to delete your account?")
-                    .setPositiveButton("Yes", (dialog, which) -> deleteAccount())
-                    .setNegativeButton("No", null)
-                    .show();
+        // تهيئة القائمة الفارغة مؤقتًا
+        userPiecesList = new ArrayList<>();
+        userPiecesAdapter = new AllPiecesAdapter(getContext(), userPiecesList);
+        rvUserPieces.setAdapter(userPiecesAdapter);
 
-        });
-    }
-
-
-    private void deleteAccount()
-    {
-            if (mAuth.getCurrentUser() == null) {
-                Toast.makeText(getContext(),
-                        "No user logged in",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-
+        if (mAuth.getCurrentUser() != null) {
+            String uid = mAuth.getCurrentUser().getUid();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            String uid = mAuth.getCurrentUser().getUid();
-
-            // حذف بيانات المستخدم من Firestore
             db.collection("users")
                     .document(uid)
-                    .delete()
-                    .addOnSuccessListener(aVoid -> {
-
-                        // حذف الحساب من Firebase Auth
-                        mAuth.getCurrentUser()
-                                .delete()
-                                .addOnSuccessListener(aVoid1 -> {
-
-                                    Toast.makeText(getContext(),
-                                            "Account deleted",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    MainActivity mainActivity = (MainActivity) getActivity();
-
-                                    if(mainActivity != null){
-                                        mainActivity.gotoLogInFragment();
-                                    }
-
-                                })
-                                .addOnFailureListener(e -> {   // ← هنا
-                                    Toast.makeText(getContext(),
-                                            "Failed to delete auth account",
-                                            Toast.LENGTH_SHORT).show();
-                                });
-
-                    })
-                    .addOnFailureListener(e -> {   // ← وهنا
-                        Toast.makeText(getContext(),
-                                "Failed to delete user data",
-                                Toast.LENGTH_SHORT).show();
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            List<String> userPiecesIds = (List<String>) documentSnapshot.get("userPieces");
+                            if (userPiecesIds != null && !userPiecesIds.isEmpty()) {
+                                fetchPiecesByIds(userPiecesIds);
+                            }
+                        }
                     });
         }
 
-    /*
-    private void gotoAllPiecesFragment() {
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft.replace(R.id.frameLayOutMain, new AllPiecesFragment());// ادخال من والى
-        ft.commit();
+        /// /////////////////////////////////////////////////////
+        // تحميل صورة المستخدم وتعديلها لتناسب الإطار الدائري
+        if (mAuth.getCurrentUser() != null) {
+            String uid = mAuth.getCurrentUser().getUid();
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(uid)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String imageUrl = documentSnapshot.getString("photo");
+                            if (imageUrl != null && !imageUrl.isEmpty()) {
+                                // الكود المحدث لتلائم الصورة المكان الدائري
+                                Picasso.get()
+                                        .load(imageUrl)
+                                        .placeholder(android.R.drawable.ic_menu_gallery) // صورة مؤقتة
+                                        .fit()        // تجعل الصورة بحجم الـ ImageView تماماً
+                                        .centerCrop() // تقص الأطراف الزائدة لملء الدائرة بدون تمطيط
+                                        .into(imgUserHome);
+                            }
+                        }
+                    });
+        }
+
+        imgMenuOptions.setOnClickListener(v -> showMyMenu(mainActivity));
+
+        btGoToAllUserHomePgFragment.setOnClickListener(v -> mainActivity.gotoAllPiecesFragment());
+        btGoToAddUserHomePgFragmint.setOnClickListener(v -> mainActivity.gotoAddPieceFragment());
+        btEditDetailsUserHomePgFragmint.setOnClickListener(v -> mainActivity.gotoEditUserDetailsFragment());
     }
-    private void gotoAddPieceFragment() {
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();//.getActivity()=> لاننا ب fragment  وليس ب activity.
-        ft.replace(R.id.frameLayOutMain, new AddPieceFragment());// ادخال من والى
-        ft.commit();
+
+    private void showMyMenu(MainActivity mainActivity) {
+        PopupMenu popup = new PopupMenu(getContext(), imgMenuOptions);
+        popup.getMenu().add("Sign Out");
+        popup.getMenu().add("Delete Account");
+
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getTitle().equals("Sign Out")) {
+                mAuth.signOut();
+                mainActivity.gotoLogInFragment();
+            } else if (item.getTitle().equals("Delete Account")) {
+                showDeleteDialog();
+            }
+            return true;
+        });
+        popup.show();
     }
-    */
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("حذف الحساب");
+        builder.setMessage("هل أنت متأكد؟ لا يمكن التراجع عن هذا الفعل.");
+        builder.setPositiveButton("نعم، احذف", (dialog, which) -> deleteAccount());
+        builder.setNegativeButton("إلغاء", null);
+        builder.show();
+    }
+
+    private void deleteAccount() {
+        if (mAuth.getCurrentUser() == null) return;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = mAuth.getCurrentUser().getUid();
+
+        db.collection("users").document(uid).delete()
+                .addOnSuccessListener(aVoid -> {
+                    mAuth.getCurrentUser().delete()
+                            .addOnSuccessListener(aVoid1 -> {
+                                Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
+                                MainActivity mainActivity = (MainActivity) getActivity();
+                                if (mainActivity != null) mainActivity.gotoLogInFragment();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(getContext(), "Auth deletion failed", Toast.LENGTH_SHORT).show());
+                })
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Firestore deletion failed", Toast.LENGTH_SHORT).show());
+    }
+    // جلب كل PieceClass حسب الـ ID
+    private void fetchPiecesByIds(List<String> ids) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        for (String pieceId : ids) {
+            db.collection("pieces").document(pieceId)
+                    .get()
+                    .addOnSuccessListener(doc -> {
+                        if (doc.exists()) {
+                            PieceClass piece = doc.toObject(PieceClass.class);
+                            if (piece != null) {
+                                userPiecesList.add(piece);
+                                userPiecesAdapter.notifyItemInserted(userPiecesList.size() - 1);
+                            }
+                        }
+                    });
+        }
+    }
 }

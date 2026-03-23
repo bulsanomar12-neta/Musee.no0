@@ -1,7 +1,10 @@
 package com.example.musee;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +38,8 @@ public class PieceDetailsFragment extends Fragment {
             tvHoursPieceDetails, tvCategoryPieceDetails, tvPricePieceDetails;
     private ImageView imgPieceDetails;
     private PieceClass myPiece;
-    private Button btSMSDetails, btEmailDetails;
+    private Button btAddtocartlPieceDetailsFragment, btEmailPieceDetailsFragment;
+    private ImageButton btnBackFromDetailsToAll;
     private boolean isEnlarged = false;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -122,6 +127,9 @@ public class PieceDetailsFragment extends Fragment {
         tvPricePieceDetails = getView().findViewById(R.id.tvPricePieceDetails);
         imgPieceDetails = getView().findViewById(R.id.imgPieceDetails);
 
+        btAddtocartlPieceDetailsFragment = getView().findViewById(R.id.btAddtocartlPieceDetailsFragment); // زر الـ SMS سابقاً
+        btEmailPieceDetailsFragment = getView().findViewById(R.id.btEmailPieceDetailsFragment);
+        btnBackFromDetailsToAll = getView().findViewById(R.id.btnBackFromDetailsToAll);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -139,6 +147,45 @@ public class PieceDetailsFragment extends Fragment {
                 } else {
                     Picasso.get().load(myPiece.getPhoto()).into(imgPieceDetails);
                 }
+                //  برمجة زر الإيميل
+                btEmailPieceDetailsFragment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String artName = myPiece.getArtistName(); // استخراج الاسم من الكائن مباشرة
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:"));
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"gallery@example.com"});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Inquiry about: " + artName);
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hello, I am interested in your artwork: " + artName);
+
+                        try {
+                            startActivity(Intent.createChooser(intent, "Send Email..."));
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), "No Email app found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                //  برمجة زر الشراء
+                btAddtocartlPieceDetailsFragment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // حالياً سنعرض رسالة فقط
+                        Toast.makeText(getActivity(), myPiece.getArtistName() + " added to cart!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                btnBackFromDetailsToAll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (getActivity() != null) {
+                            // الحصول على MainActivity لاستخدام navigation
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            mainActivity.gotoAllPiecesFragment();
+                        if (mainActivity == null) {
+                            return;
+                        }}
+                    }
+                });
             }
         }
     }
@@ -178,13 +225,5 @@ public class PieceDetailsFragment extends Fragment {
                 Toast.makeText(requireContext(), "Permission denied. Cannot send SMS.", Toast.LENGTH_SHORT).show();
             }
         }
-/*
-        if (requestCode == REQUEST_CALL_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCall();
-            }
-        }
- */
-
     }
 }

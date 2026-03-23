@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -34,17 +35,19 @@ import com.google.api.Context;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.UUID;
 
 public class AddPieceFragment extends Fragment {
     ///////////////////////////////////////////
-    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etSizeAddPieceFragment,etPriceAddPieceFragment;
+    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etPriceAddPieceFragment;
     private static final int GALLERY_REQUEST_CODE = 123;
 
-    Spinner spCategoryAddPiece;
+    Spinner etSizeAddPieceFragment,spCategoryAddPiece;
     private Button btAddPieceFragment;
+    private ImageButton btnBackAddPieceFragment;
     private FirebaseServices fbs;
     private UtilsClass utils; // ✅ تمت الإضافة (لرفع الصورة)
     private ImageView imgVImageAddPieceFragment;
@@ -95,6 +98,8 @@ public class AddPieceFragment extends Fragment {
         btAddPieceFragment = getView().findViewById(R.id.btAddPieceFragment);
         imgVImageAddPieceFragment = getView().findViewById(R.id.imgPieceItem);
         spCategoryAddPiece = getView().findViewById(R.id.spCategoryAddPiece);
+        btnBackAddPieceFragment = getView().findViewById(R.id.btnBackAddPieceFragment);
+
         btAddPieceFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +120,17 @@ public class AddPieceFragment extends Fragment {
             }
         });
         //((MainActivity)getActivity()).pushFragment(new AddPieceFragment());
+
+        // برمجة زر العودة
+        btnBackAddPieceFragment.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                // الحصول على MainActivity لاستخدام navigation
+                MainActivity mainActivity = (MainActivity) getActivity();
+                if (mainActivity == null)
+                    return;
+                mainActivity.gotoUserHomePgFragment();
+            }
+        });
     }
 
     private void addToFirestore() {
@@ -124,7 +140,7 @@ public class AddPieceFragment extends Fragment {
         artist = etArtistAddPieceFragment.getText().toString();
         hours = etHoursAddPieceFragment.getText().toString();
         information = etInformationAddPieceFragment.getText().toString();
-        size = etSizeAddPieceFragment.getText().toString();
+        size = etSizeAddPieceFragment.getSelectedItem().toString();
         price = etPriceAddPieceFragment.getText().toString();
 
         if(selectedImageUri == null){
@@ -164,14 +180,28 @@ public class AddPieceFragment extends Fragment {
                         String imageURL = uri.toString();
 
                         // 4. Use the URL to create your PieceClass object
-                        PieceClass piece = new PieceClass(id, category, artist, hours, size, information, price, imageURL);
-                        // 5. Finally, save the PieceClass object to Firestore
+                        PieceClass piece = new PieceClass(id, category, artist, hours, size, information, price, imageURL, user.getEmail());
+
+                        // 5. Save the PieceClass object to Firestore
                         fbs.getFire().collection("pieces")
-                                .add(piece)
+                                .add(piece)  // إضافة الكائن PieceClass كمستند جديد داخل مجموعة "pieces"
                                 .addOnSuccessListener(documentReference -> {
+
+                                    ///  إضافة id اللوحة إلى قائمة UserPieces الخاصة بالمستخدم
+                                    fbs.getFire().collection("users")
+                                            .document(user.getUid())  // مستند المستخدم الحالي باستخدام UID
+                                            .update("userPieces", FieldValue.arrayUnion(documentReference.getId()));
+                                    // FieldValue.arrayUnion(id) يضيف id اللوحة للمصفوفة بدون تكرار
+                                    // هذه هي الطريقة الصحيحة لتتبع كل لوحات المستخدم
+
+                                    // 2️⃣ إظهار رسالة نجاح للمستخدم بعد تحديث القائمة
                                     Toast.makeText(requireContext(), "Art piece added successfully", Toast.LENGTH_LONG).show();
-                                    btAddPieceFragment.setEnabled(true); // Re-enable the button
-                                    gotoAllPieces(); // Navigate away
+
+                                    // 3️⃣ إعادة تفعيل زر الإضافة بعد الانتهاء
+                                    btAddPieceFragment.setEnabled(true);
+
+                                    // 4️⃣ الانتقال إلى صفحة كل اللوحات بعد كل ما سبق
+                                    gotoAllPieces();
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(getActivity(), "Failed to save data: " + e.getMessage(), Toast.LENGTH_LONG).show();
