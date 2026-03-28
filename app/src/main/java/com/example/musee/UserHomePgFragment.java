@@ -1,21 +1,19 @@
 package com.example.musee;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musee.classes.AllPiecesAdapter;
 import com.example.musee.classes.PieceClass;
@@ -26,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class UserHomePgFragment extends Fragment {
 
@@ -35,14 +34,21 @@ public class UserHomePgFragment extends Fragment {
     private ImageView imgMenuOptions, imgUserHome;
     private FirebaseAuth mAuth;
 
-    /// الاضافة الخاصة بعرض اللوحات التي انشأها المستخدم
+    // RecyclerViews
     private RecyclerView rvUserPieces;
+    private RecyclerView rvCartPieces;
+
+    // Adapters & Lists
     private AllPiecesAdapter userPiecesAdapter;
-    private ArrayList<PieceClass> userPiecesList; // القائمة الخاصة بالمستخدم
+    private ArrayList<PieceClass> userPiecesList; // لوحات المستخدم
+
+    private AllPiecesAdapter cartPiecesAdapter;
+    private ArrayList<PieceClass> cartPiecesList; // لوحات العربة
+    // إضافة أعلى مع العناصر الأخرى
+    private TextView tvTotalCartPrice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // تأكدي أن اسم الملف هنا مطابق لملف الـ XML الجديد (fragment_user_home)
         return inflater.inflate(R.layout.fragment_user_homepg, container, false);
     }
 
@@ -58,25 +64,31 @@ public class UserHomePgFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
+        // العناصر الرئيسية
         imgMenuOptions = view.findViewById(R.id.imgMenuOptions);
         imgUserHome = view.findViewById(R.id.imgUserHome);
         btGoToAllUserHomePgFragment = view.findViewById(R.id.btGoToAllUserHomePgFragment);
         btGoToAddUserHomePgFragmint = view.findViewById(R.id.btGoToAddUserHomePgFragmint);
         btEditDetailsUserHomePgFragmint = view.findViewById(R.id.btEditDetailsUserHomePgFragmint);
 
-        ///  ربط عرض اللوحات//////////////////////////////////////////////////
+        /// RecyclerView للوحة المستخدم
         rvUserPieces = view.findViewById(R.id.rvUserPiecesHomePgFragment);
-
-        // إعداد الـ RecyclerView أفقي
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.HORIZONTAL, false);
-        rvUserPieces.setLayoutManager(layoutManager);
-
-        // تهيئة القائمة الفارغة مؤقتًا
+        rvUserPieces.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         userPiecesList = new ArrayList<>();
         userPiecesAdapter = new AllPiecesAdapter(getContext(), userPiecesList);
         rvUserPieces.setAdapter(userPiecesAdapter);
 
+        /// RecyclerView لعربة التسوق
+        rvCartPieces = view.findViewById(R.id.rvCartUserHomePgFragment);
+        rvCartPieces.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        cartPiecesList = new ArrayList<>();
+        cartPiecesAdapter = new AllPiecesAdapter(getContext(), cartPiecesList);
+        rvCartPieces.setAdapter(cartPiecesAdapter);
+
+        tvTotalCartPrice = view.findViewById(R.id.tvTotalCartPrice);
+        updateCartTotal(); // عرض المجموع الأولي (صفر قبل التحميل)
+
+        // تحميل البيانات من Firestore
         if (mAuth.getCurrentUser() != null) {
             String uid = mAuth.getCurrentUser().getUid();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -86,16 +98,32 @@ public class UserHomePgFragment extends Fragment {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
+                            // لوحات المستخدم
                             List<String> userPiecesIds = (List<String>) documentSnapshot.get("userPieces");
                             if (userPiecesIds != null && !userPiecesIds.isEmpty()) {
-                                fetchPiecesByIds(userPiecesIds);
+                                fetchPiecesByIds(userPiecesIds, userPiecesList, userPiecesAdapter, false);
+                            }
+
+                            // لوحات العربة
+                            List<String> cartIds = (List<String>) documentSnapshot.get("userPiecesCart");
+                            if (cartIds != null && !cartIds.isEmpty()) {
+                                fetchPiecesByIds(cartIds, cartPiecesList, cartPiecesAdapter, true);
                             }
                         }
                     });
         }
 
-        /// /////////////////////////////////////////////////////
-        // تحميل صورة المستخدم وتعديلها لتناسب الإطار الدائري
+        // تحميل صورة المستخدم
+        loadUserImage();
+
+        // أزرار التفاعل
+        imgMenuOptions.setOnClickListener(v -> showMyMenu(mainActivity));
+        btGoToAllUserHomePgFragment.setOnClickListener(v -> mainActivity.gotoAllPiecesFragment());
+        btGoToAddUserHomePgFragmint.setOnClickListener(v -> mainActivity.gotoAddPieceFragment());
+        btEditDetailsUserHomePgFragmint.setOnClickListener(v -> mainActivity.gotoEditUserDetailsFragment());
+    }
+
+    private void loadUserImage() {
         if (mAuth.getCurrentUser() != null) {
             String uid = mAuth.getCurrentUser().getUid();
             FirebaseFirestore.getInstance()
@@ -106,23 +134,16 @@ public class UserHomePgFragment extends Fragment {
                         if (documentSnapshot.exists()) {
                             String imageUrl = documentSnapshot.getString("photo");
                             if (imageUrl != null && !imageUrl.isEmpty()) {
-                                // الكود المحدث لتلائم الصورة المكان الدائري
                                 Picasso.get()
                                         .load(imageUrl)
-                                        .placeholder(android.R.drawable.ic_menu_gallery) // صورة مؤقتة
-                                        .fit()        // تجعل الصورة بحجم الـ ImageView تماماً
-                                        .centerCrop() // تقص الأطراف الزائدة لملء الدائرة بدون تمطيط
+                                        .placeholder(android.R.drawable.ic_menu_gallery)
+                                        .fit()
+                                        .centerCrop()
                                         .into(imgUserHome);
                             }
                         }
                     });
         }
-
-        imgMenuOptions.setOnClickListener(v -> showMyMenu(mainActivity));
-
-        btGoToAllUserHomePgFragment.setOnClickListener(v -> mainActivity.gotoAllPiecesFragment());
-        btGoToAddUserHomePgFragmint.setOnClickListener(v -> mainActivity.gotoAddPieceFragment());
-        btEditDetailsUserHomePgFragmint.setOnClickListener(v -> mainActivity.gotoEditUserDetailsFragment());
     }
 
     private void showMyMenu(MainActivity mainActivity) {
@@ -169,8 +190,9 @@ public class UserHomePgFragment extends Fragment {
                 })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Firestore deletion failed", Toast.LENGTH_SHORT).show());
     }
-    // جلب كل PieceClass حسب الـ ID
-    private void fetchPiecesByIds(List<String> ids) {
+
+    // جلب كل PieceClass حسب الـ ID وتحديث Adapter
+    private void fetchPiecesByIds(List<String> ids, ArrayList<PieceClass> list, AllPiecesAdapter adapter, boolean isCart) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         for (String pieceId : ids) {
             db.collection("pieces").document(pieceId)
@@ -179,11 +201,23 @@ public class UserHomePgFragment extends Fragment {
                         if (doc.exists()) {
                             PieceClass piece = doc.toObject(PieceClass.class);
                             if (piece != null) {
-                                userPiecesList.add(piece);
-                                userPiecesAdapter.notifyItemInserted(userPiecesList.size() - 1);
+                                list.add(piece);
+                                adapter.notifyItemInserted(list.size() - 1);
+
+                                // لو هذه العربة، حدث المجموع
+                                if (isCart) updateCartTotal();
                             }
                         }
                     });
         }
     }
+
+    private void updateCartTotal() {
+        double total = 0.0;
+        for (PieceClass piece : cartPiecesList) {
+            total += Double.parseDouble(piece.getPrice());
+        }
+        tvTotalCartPrice.setText("total: " + String.format(Locale.US, "%.2f", total) + " ₪");
+    }
+
 }

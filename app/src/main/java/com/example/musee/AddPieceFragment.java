@@ -3,7 +3,6 @@ package com.example.musee;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -11,12 +10,10 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +21,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.musee.classes.FirebaseServices;
 import com.example.musee.classes.PieceClass;
 import com.example.musee.classes.UtilsClass;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.api.Context;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
 
@@ -42,7 +35,7 @@ import java.util.UUID;
 
 public class AddPieceFragment extends Fragment {
     ///////////////////////////////////////////
-    private EditText etIdAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etPriceAddPieceFragment;
+    private EditText etNameAddPieceFragment, etArtistAddPieceFragment, etHoursAddPieceFragment, etInformationAddPieceFragment,etPriceAddPieceFragment;
     private static final int GALLERY_REQUEST_CODE = 123;
 
     Spinner etSizeAddPieceFragment,spCategoryAddPiece;
@@ -88,7 +81,7 @@ public class AddPieceFragment extends Fragment {
         fbs = FirebaseServices.getInstance();
         utils = UtilsClass.getInstance();// ✅ تمت الإضافة من كود الأستاذ
 
-        etIdAddPieceFragment = getView().findViewById(R.id.etIdAddPieceFragment);
+        etNameAddPieceFragment = getView().findViewById(R.id.etNameAddPieceFragment);
         etArtistAddPieceFragment = getView().findViewById(R.id.etArtistAddPieceFragment);
         etHoursAddPieceFragment = getView().findViewById(R.id.etHoursAddPieceFragment);
         etInformationAddPieceFragment = getView().findViewById(R.id.etInformationAddPieceFragment);
@@ -134,8 +127,8 @@ public class AddPieceFragment extends Fragment {
     }
 
     private void addToFirestore() {
-        String id,artist,hours,information,category,size,price;
-        id = etIdAddPieceFragment.getText().toString();
+        String name,artist,hours,information,category,size,price;
+        name = etNameAddPieceFragment.getText().toString();
         category = spCategoryAddPiece.getSelectedItem().toString();
         artist = etArtistAddPieceFragment.getText().toString();
         hours = etHoursAddPieceFragment.getText().toString();
@@ -148,7 +141,7 @@ public class AddPieceFragment extends Fragment {
             return;
         }
 
-        if(id.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty() || size.trim().isEmpty() || price.trim().isEmpty()){
+        if(name.trim().isEmpty() || artist.trim().isEmpty() || hours.trim().isEmpty() || information.trim().isEmpty() || category.trim().isEmpty() || size.trim().isEmpty() || price.trim().isEmpty()){
             Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -180,7 +173,7 @@ public class AddPieceFragment extends Fragment {
                         String imageURL = uri.toString();
 
                         // 4. Use the URL to create your PieceClass object
-                        PieceClass piece = new PieceClass(id, category, artist, hours, size, information, price, imageURL, user.getEmail());
+                        PieceClass piece = new PieceClass(name, category, artist, hours, size, information, price, imageURL, user.getEmail());
 
                         // 5. Save the PieceClass object to Firestore
                         fbs.getFire().collection("pieces")
@@ -194,18 +187,22 @@ public class AddPieceFragment extends Fragment {
                                     // FieldValue.arrayUnion(id) يضيف id اللوحة للمصفوفة بدون تكرار
                                     // هذه هي الطريقة الصحيحة لتتبع كل لوحات المستخدم
 
-                                    // 2️⃣ إظهار رسالة نجاح للمستخدم بعد تحديث القائمة
-                                    Toast.makeText(requireContext(), "Art piece added successfully", Toast.LENGTH_LONG).show();
+                                    // 2️⃣ وضع ID المستند داخل الكائن نفسه (في الذاكرة)*******************************************
+                                    piece.setPieceId(documentReference.getId());
 
-                                    // 3️⃣ إعادة تفعيل زر الإضافة بعد الانتهاء
-                                    btAddPieceFragment.setEnabled(true);
-
-                                    // 4️⃣ الانتقال إلى صفحة كل اللوحات بعد كل ما سبق
-                                    gotoAllPieces();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(getActivity(), "Failed to save data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                    btAddPieceFragment.setEnabled(true); // Re-enable the button
+                                    // 3️⃣ تحديث المستند في Firestore ليحتوي على الـ pieceId
+                                    fbs.getFire().collection("pieces")
+                                            .document(documentReference.getId())
+                                            .update("pieceId", documentReference.getId())
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(requireContext(), "Art piece added successfully", Toast.LENGTH_LONG).show();
+                                                btAddPieceFragment.setEnabled(true);
+                                                gotoAllPieces();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(getActivity(), "Failed to update pieceId: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                btAddPieceFragment.setEnabled(true);
+                                            });
                                 });
                     }).addOnFailureListener(e -> {
                         Toast.makeText(getActivity(), "Failed to get download URL: " + e.getMessage(), Toast.LENGTH_LONG).show();

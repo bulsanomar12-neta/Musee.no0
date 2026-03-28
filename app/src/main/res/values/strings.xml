@@ -14,26 +14,26 @@
     <string-array name="types_array_size">
         <item>Select Size</item>
 
-        <item>A5: 5.8" × 8.3" (14.8 × 21 cm)</item>
-        <item>A4: 8.3" × 11.7" (21 × 29.7 cm)</item>
-        <item>A3: 11.7" × 16.5" (29.7 × 42 cm)</item>
-        <item>A2: 16.5" × 23.4" (42 × 59.4 cm)</item>
-        <item>A1: 23.4" × 33.1" (59.4 × 84.1 cm)</item>
+        <item>A5: 14.8×21</item>
+        <item>A4: 21×29.7</item>
+        <item>A3: 29.7×42</item>
+        <item>A2: 42×59.4</item>
+        <item>A1: 59.4×84.1</item>
 
-        <item>Letter: 8.5" × 11" (21.6 × 27.9 cm)</item>
-        <item>Legal: 8.5" × 14" (21.6 × 35.6 cm)</item>
+        <item>21.6×27.9</item>
+        <item>21.6×35.6 </item>
 
-        <item>8" × 10" (20 × 25 cm)</item>
-        <item>9" × 12" (23 × 30 cm)</item>
-        <item>11" × 14" (28 × 35 cm)</item>
-        <item>12" × 16" (30 × 40 cm)</item>
-        <item>14" × 18" (35 × 45 cm)</item>
-        <item>16" × 20" (40 × 50 cm)</item>
-        <item>18" × 24" (45 × 60 cm)</item>
-        <item>20" × 24" (50 × 60 cm)</item>
-        <item>24" × 30" (60 × 75 cm)</item>
-        <item>24" × 36" (60 × 90 cm)</item>
-        <item>30" × 40" (75 × 100 cm)</item>
-        <item>36" × 48" (90 × 120 cm)</item>
+        <item>20×25</item>
+        <item>23×30</item>
+        <item>28×35</item>
+        <item>30×40</item>
+        <item>35×45</item>
+        <item>40×50</item>
+        <item>45×60</item>
+        <item>50×60</item>
+        <item>60×75</item>
+        <item>60×90</item>
+        <item>75×100</item>
+        <item>90×120</item>
     </string-array>
 </resources>

@@ -115,7 +115,7 @@ public class SearchPieceFragment extends Fragment {
                 matchPrice = piecePrice >= minPrice && piecePrice <= maxPrice;
             } catch (Exception e) { matchPrice = false; }
 
-            boolean matchSearchText = !searchFlag || piece.getId().toLowerCase().contains(searchText);
+            boolean matchSearchText = !searchFlag || piece.getname().toLowerCase().contains(searchText);
 
             if (matchCategory && matchSize && matchPrice && matchSearchText) {
                 filteredList.add(piece);

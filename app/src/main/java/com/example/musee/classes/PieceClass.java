@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class PieceClass implements Parcelable {
-    private String id;
+    private String name;
     private String category;
     private String artistName;
     private String hours;
@@ -15,12 +15,14 @@ public class PieceClass implements Parcelable {
     private  String price;
     private String photo;
     private String currentUsereMail;
+    private String pieceId;
+
 
     public PieceClass()
     {}
 
-    public PieceClass(String id, String category, String artistName, String hours,String size, String information,String price, String photo,String currentUsereMail){
-        this.id = id;
+    public PieceClass(String name, String category, String artistName, String hours,String size, String information,String price, String photo,String currentUsereMail){
+        this.name = name;
         this.category = category;
         this.artistName = artistName;
         this.hours = hours;
@@ -29,10 +31,11 @@ public class PieceClass implements Parcelable {
         this.price = price;
         this.photo = photo;
         this.currentUsereMail = currentUsereMail;
+        this.pieceId = null;
     }
 
     protected PieceClass(Parcel in) {
-        id = in.readString();
+        name = in.readString();
         category = in.readString();
         artistName = in.readString();
         hours = in.readString();
@@ -41,7 +44,9 @@ public class PieceClass implements Parcelable {
         price = in.readString();
         photo = in.readString();
         currentUsereMail = in.readString();
+        pieceId = null;
     }
+
 
     public static final Creator<PieceClass> CREATOR = new Creator<PieceClass>() {
         @Override
@@ -55,7 +60,7 @@ public class PieceClass implements Parcelable {
         }
     };
 
-    public String getId(){return id;}
+    public String getname(){return name;}
     public String getCategory(){return category;}
     public String getArtistName(){return artistName;}
     public String getHours(){return hours;}
@@ -66,13 +71,21 @@ public class PieceClass implements Parcelable {
     public String getCurrentUsereMail() {return currentUsereMail;}
 
 
+    // 2️⃣ أضف getter و setter
+    public String getPieceId() {
+        return pieceId;
+    }
+
+    public void setPieceId(String pieceId) {
+        this.pieceId = pieceId;
+    }
 
 
 
 
     public String toString() {
         return "Piece{" +
-                "id='" + id + '\'' +
+                "name='" + name + '\'' +
                 ", category='" + category + '\'' +
                 ", artistName='" + artistName + '\'' +
                 ", hours='" + hours + '\'' +
@@ -86,7 +99,7 @@ public class PieceClass implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(name);
         dest.writeString(artistName);
         dest.writeString(size);
         dest.writeString(information);

@@ -42,6 +42,8 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AllPiecesFragment extends Fragment {
+
+
     private RecyclerView rvAllPiecesFragment;
     private FirebaseServices fbs;
     private AllPiecesAdapter myAdapter;
@@ -151,7 +153,7 @@ public class AllPiecesFragment extends Fragment {
         filteredList.clear();
 
         for (PieceClass piece : pieces) {
-            boolean matchName = text.isEmpty() || piece.getId().toLowerCase().contains(text);
+            boolean matchName = text.isEmpty() || piece.getname().toLowerCase().contains(text);
             boolean matchCategory = !catFlag || piece.getCategory().equalsIgnoreCase(cat);
             boolean matchSize = !sizeFlag || piece.getSize().equalsIgnoreCase(sz);
 
@@ -230,18 +232,22 @@ public class AllPiecesFragment extends Fragment {
             public void onItemClick(int position) {
                 // Handle item click here
                 ///String selectedItem = pieces.get(position).getArtistName();
-                String selectedItem = filteredList.get(position).getArtistName(); // CHANGE
-                Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_LONG).show();
+                //String selectedItem = filteredList.get(position).getArtistName(); // CHANGE
+                //Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_LONG).show();
+                PieceClass selectedPiece = filteredList.get(position);
 
+                // إعداد البيانات للتمرير إلى Fragment التفاصيل
                 Bundle args = new Bundle();
-                args.putParcelable("pieces", filteredList.get(position)); // CHANGE
-                ///args.putParcelable("pieces", pieces.get(position)); // or use Parcelable for better performance
+                args.putParcelable("pieces", selectedPiece);           // تمرير الكائن نفسه
+                args.putString("pieceDocId", selectedPiece.getPieceId()); // ← تمرير الـ ID
 
-                PieceDetailsFragment cd = new PieceDetailsFragment();
-                cd.setArguments(args);
+                // إنشاء Fragment التفاصيل
+                PieceDetailsFragment fragment = new PieceDetailsFragment();
+                fragment.setArguments(args);
 
+                // استبدال Fragment الحالي
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.frameLayOutMain,cd);
+                ft.replace(R.id.frameLayOutMain, fragment);
                 ft.commit();
             }
         });

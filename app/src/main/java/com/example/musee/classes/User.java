@@ -13,6 +13,7 @@ public class User {
     private String photo;
     private String eMail;
     private ArrayList<String> userPieces;
+    private ArrayList<String> userPiecesCart;
 
     public User() {}
 
@@ -26,6 +27,7 @@ public class User {
         this.eMail = eMail;
         this.photo = ""; // بدون صورة افتراضية
         this.userPieces = new ArrayList<>();
+        this.userPiecesCart = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String userName,
@@ -38,6 +40,7 @@ public class User {
         this.photo = photo;
         this.eMail = eMail;
         this.userPieces = new ArrayList<>();
+        this.userPiecesCart = new ArrayList<>();
     }
 
     public User(Parcel in) {
@@ -117,6 +120,12 @@ public class User {
     public void setUserPieces(ArrayList<String> userPieces) {
         this.userPieces = userPieces;
     }
+    public ArrayList<String> getUserPiecesCart() {
+        return userPiecesCart;
+    }
 
+    public void setUserPiecesCart(ArrayList<String> userPieces) {
+        this.userPieces = userPiecesCart;
+    }
 
 }

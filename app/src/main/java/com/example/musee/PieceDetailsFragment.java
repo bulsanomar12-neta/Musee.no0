@@ -21,6 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.musee.classes.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+
+
 import com.example.musee.classes.FirebaseServices;
 import com.example.musee.classes.PieceClass;
 import com.squareup.picasso.Picasso;
@@ -167,62 +173,74 @@ public class PieceDetailsFragment extends Fragment {
                 });
 
                 //  برمجة زر الشراء
-                btAddtocartlPieceDetailsFragment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // حالياً سنعرض رسالة فقط
-                        Toast.makeText(getActivity(), myPiece.getArtistName() + " added to cart!", Toast.LENGTH_SHORT).show();
+                btAddtocartlPieceDetailsFragment.setOnClickListener(v -> {
+                    FirebaseUser user = fbs.getAuth().getCurrentUser();
+                    if (user == null) {
+                        Toast.makeText(getActivity(), "Login first", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    fbs.getFire().collection("userPiecesCart")
+                            .add(myPiece) // إضافة myPiece كمستند جديد
+                            .addOnSuccessListener(documentReference -> { // ★ نحصل على documentReference
+                                //  استخدام الـ documentReference للحصول على الـ ID الحقيقي
+                                String pieceDocId = documentReference.getId(); // ★ ID الفعلي للقطعة في Firestore
+
+                                // تحديث مصفوفة cartPieces في مستند المستخدم
+                                fbs.getFire().collection("users")
+                                        .document(user.getUid())
+                                        .update("userPiecesCart", FieldValue.arrayUnion(pieceDocId)) // ★ نضيف الـ ID إلى cart المستخدم
+                                        .addOnSuccessListener(unused -> {
+                                            Toast.makeText(getActivity(), myPiece.getArtistName() + " added to cart!", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(getActivity(), "Failed to add to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getActivity(), "Failed to save piece to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 });
-                btnBackFromDetailsToAll.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (getActivity() != null) {
-                            // الحصول على MainActivity لاستخدام navigation
-                            MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.gotoAllPiecesFragment();
-                        if (mainActivity == null) {
-                            return;
-                        }}
+
+         /// /////////////////////////////////////////////////////////////////////////////////////////////////
+                btAddtocartlPieceDetailsFragment.setOnClickListener(v -> {
+                    FirebaseUser user = fbs.getAuth().getCurrentUser();
+                    if (user == null) {
+                        Toast.makeText(getActivity(), "Login first", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    // خذ الـ ID مباشرة من myPiece
+                    String pieceId = myPiece.getPieceId(); // ← هذا هو ID المستند
+                    if (pieceId == null || pieceId.isEmpty()) {
+                        Toast.makeText(getActivity(), "Piece ID is missing!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // أضف الـ ID إلى Cart
+                    fbs.getFire().collection("users")
+                            .document(user.getUid())
+                            .update("userPiecesCart", FieldValue.arrayUnion(pieceId))
+                            .addOnSuccessListener(unused -> {
+                                Toast.makeText(getActivity(), myPiece.getArtistName() + " added to cart!", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getActivity(), "Failed to add to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 });
-            }
-        }
-    }
+            /// /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void checkAndSendSMS() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SEND_SMS);
-        } else {
-            sendSMS();
-        }
-    }
+               // زر الرجوع (يجب أن يكون خارج زر Add to Cart)
+                btnBackFromDetailsToAll.setOnClickListener(v -> {
 
-    //رقم الهاتف ساتعلم كيف يأحذ من المستخدم وليس من اللوحه نفسها
-    private void sendSMS() {
-        /*
-        String phoneNumber = myPiece.getPhone();
-        String message = "I am Interested in your  "+myPiece.getNameCar()+"  car: " + myPiece.getCar_num();
+                    if (getActivity() == null)
+                        return;
 
-        try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-            Toast.makeText(getActivity(), "SMS sent.", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(getActivity(), "SMS sending failed.", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.gotoAllPiecesFragment();
 
-         */
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_SEND_SMS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                sendSMS();
-            } else {
-                Toast.makeText(requireContext(), "Permission denied. Cannot send SMS.", Toast.LENGTH_SHORT).show();
+                });
             }
         }
     }

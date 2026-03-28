@@ -60,7 +60,7 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
     public void onBindViewHolder(@NonNull AllPiecesAdapter.MyViewHolder holder, int position) {
         PieceClass piece = allPieces.get(position);
         //User u = fbs.getCurrentUser();
-        holder.ida.setText(piece.getId());
+        holder.namea.setText(piece.getname());
         holder.artista.setText(piece.getArtistName());
         holder.siza.setText(piece.getSize());
         holder.prica.setText(piece.getPrice());
@@ -92,11 +92,11 @@ public class AllPiecesAdapter extends RecyclerView.Adapter<AllPiecesAdapter.MyVi
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView ida, artista,siza, prica;
+        TextView namea, artista,siza, prica;
         ImageView imga;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ida = itemView.findViewById(R.id.tvArtNamePieceItem);
+            namea = itemView.findViewById(R.id.tvArtNamePieceItem);
             artista = itemView.findViewById(R.id.tvArtistNamePieceItem);
             siza = itemView.findViewById(R.id.tvSizePieceItem);
             prica = itemView.findViewById(R.id.tvPricePieceItem);
