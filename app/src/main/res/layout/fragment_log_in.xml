@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF9F6"
-    tools:context=".LogInFragment">
+    tools:context=".Fragments.LogInFragment">
 
     <ImageButton
         android:id="@+id/btnBackToAllFromLoginFragment"

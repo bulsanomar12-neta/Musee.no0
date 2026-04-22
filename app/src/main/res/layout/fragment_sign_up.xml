@@ -76,8 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#F0EBE8"
-                        android:padding="20dp"
-                        android:scaleType="centerInside"
+                        android:scaleType="centerCrop"
                         android:src="@android:drawable/ic_menu_camera"
                         app:tint="#5B4242" />
                 </androidx.cardview.widget.CardView>

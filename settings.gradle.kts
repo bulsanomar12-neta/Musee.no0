@@ -16,6 +16,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+/*
+// هذا هو السطر السحري الذي سيحل المشكلة:
+        maven {
+            url = uri("https://maven.cardinalcommerce.com/artifactory/android")
+        }
+        maven { url = uri("https://jitpack.io") }
+ */
     }
 }
 

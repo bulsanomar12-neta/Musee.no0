@@ -12,9 +12,25 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 
+import com.example.musee.Data.AddPieceFragment;
+import com.example.musee.Data.CheckOutFragment;
+import com.example.musee.Fragments.AllPiecesFragment;
+import com.example.musee.Data.EditUserDetailsFragment;
+import com.example.musee.Fragments.ForgotPasswordFragment;
+import com.example.musee.Fragments.LogInFragment;
+import com.example.musee.Data.SignUpFragment;
+import com.example.musee.Fragments.UserHomePgFragment;
 import com.example.musee.classes.FirebaseServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+//تهيئة paypal
+/*
+import com.paypal.checkout.PayPalCheckout;
+import com.paypal.checkout.config.CheckoutConfig;
+import com.paypal.checkout.config.Environment;
+
+ */
 
 import java.util.Stack;
 
@@ -28,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+/*
+        // ⭐ تهيئة PayPal
+        CheckoutConfig config = new CheckoutConfig(
+                this.getApplication(),                      // Context للتطبيق: يستخدمه PayPal SDK للوصول لإعدادات التطبيق
+                "ATe-cGOLi0mIsBCU_IVa6_OX1vaZG1HQ3z8lqKX" +
+                        "NTFaccAEKTmNaQAEKyAAs7sYVIJfr3zbu3g6kZeA0",                   // Client ID من حساب Sandbox الخاص بك على PayPal
+                Environment.SANDBOX,                        // بيئة الاختبار Sandbox (ليست حقيقية، للتجربة فقط)
+                "https://example.com/return"                // رابط العودة بعد الدفع (يمكن أن يكون رابط وهمي للاختبار)
+        );
+        PayPalCheckout.setConfig(config);                 // تهيئة مكتبة PayPal بالاعدادات أعلاه
+
+
+ */
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -107,9 +136,15 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.frameLayOutMain, new ForgotPasswordFragment());// ادخال من والى
         ft.commit();
     }
-    public void gotoSearchFragment() {
+    public void gotoUserHomeFragment (){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frameLayOutMain, new SearchPieceFragment());// ادخال من والى
+        ft.replace(R.id.frameLayOutMain, new UserHomePgFragment());// ادخال من والى
+        ft.commit();
+    }
+
+    public void gotoCheckOutFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayOutMain, new CheckOutFragment());// ادخال من والى
         ft.commit();
     }
 }

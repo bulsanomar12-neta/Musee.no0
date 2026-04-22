@@ -1,4 +1,4 @@
-package com.example.musee.classes;
+package com.example.musee.Adapters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 //import com.squareup.picasso.Picasso;
 
 import com.example.musee.MainActivity;
-import com.example.musee.PieceDetailsFragment;
+import com.example.musee.Fragments.PieceDetailsFragment;
 import com.example.musee.R;
+import com.example.musee.classes.FirebaseServices;
+import com.example.musee.classes.PieceClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

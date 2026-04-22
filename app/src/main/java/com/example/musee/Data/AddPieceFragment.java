@@ -1,4 +1,4 @@
-package com.example.musee;
+package com.example.musee.Data;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,6 +22,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.example.musee.Fragments.AllPiecesFragment;
+import com.example.musee.MainActivity;
+import com.example.musee.R;
 import com.example.musee.classes.FirebaseServices;
 import com.example.musee.classes.PieceClass;
 import com.example.musee.classes.UtilsClass;
@@ -112,7 +115,6 @@ public class AddPieceFragment extends Fragment {
                 openGallery();
             }
         });
-        //((MainActivity)getActivity()).pushFragment(new AddPieceFragment());
 
         // برمجة زر العودة
         btnBackAddPieceFragment.setOnClickListener(v -> {
@@ -145,11 +147,7 @@ public class AddPieceFragment extends Fragment {
             Toast.makeText(getActivity(), "Some fields are empty.", Toast.LENGTH_LONG).show();
             return;
         }
-        /*if (selectedImageUri != null && fbs.getSelectedImageURL() == null) {
-            Toast.makeText(getActivity(), "Please wait, image is uploading", Toast.LENGTH_SHORT).show();
-            return;
-        }
-         */
+
 
         // Check for logged-in user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -161,53 +159,64 @@ public class AddPieceFragment extends Fragment {
         Toast.makeText(getActivity(), "Please wait, uploading data...", Toast.LENGTH_SHORT).show();
         btAddPieceFragment.setEnabled(false); // Disable button to prevent multiple clicks
 
-        // 2. Start the image upload to Firebase Storage
+        // Start the image upload to Firebase Storage
         String imagePath = "images/" + UUID.randomUUID().toString() + ".jpg";
         StorageReference imageRef = fbs.getStorage().getReference().child(imagePath);
 
         imageRef.putFile(selectedImageUri)
                 .addOnSuccessListener(taskSnapshot -> {
+
                     // 3. When upload is successful, get the download URL
                     imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+
                         // This is the public URL of your uploaded image
                         String imageURL = uri.toString();
 
-                        // 4. Use the URL to create your PieceClass object
+                        // Use the URL to create your PieceClass object
                         PieceClass piece = new PieceClass(name, category, artist, hours, size, information, price, imageURL, user.getEmail());
 
-                        // 5. Save the PieceClass object to Firestore
+                        piece.setSold(false); // تأكدي أن اللوحة الجديدة ليست مباعة
+
+                        // Save the PieceClass object to Firestore
                         fbs.getFire().collection("pieces")
-                                .add(piece)  // إضافة الكائن PieceClass كمستند جديد داخل مجموعة "pieces"
+                                .add(piece) // اضافة الكائن
                                 .addOnSuccessListener(documentReference -> {
 
-                                    ///  إضافة id اللوحة إلى قائمة UserPieces الخاصة بالمستخدم
+                                    String generatedId = documentReference.getId(); // ID الذي أنشأه Firestore
+                                    piece.setPieceId(generatedId); // ربط الكائن بالـ ID
+
+                                    // ✅ 1. تحديث المستخدم مباشرة (مهم!)
                                     fbs.getFire().collection("users")
-                                            .document(user.getUid())  // مستند المستخدم الحالي باستخدام UID
-                                            .update("userPieces", FieldValue.arrayUnion(documentReference.getId()));
-                                    // FieldValue.arrayUnion(id) يضيف id اللوحة للمصفوفة بدون تكرار
-                                    // هذه هي الطريقة الصحيحة لتتبع كل لوحات المستخدم
+                                            .document(user.getUid())
+                                            .update("userPieces", FieldValue.arrayUnion(generatedId))
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(getActivity(), "Failed to update user: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            });
 
-                                    // 2️⃣ وضع ID المستند داخل الكائن نفسه (في الذاكرة)*******************************************
-                                    piece.setPieceId(documentReference.getId());
-
-                                    // 3️⃣ تحديث المستند في Firestore ليحتوي على الـ pieceId
+                                    // ✅ 2. تحديث القطعة (pieceId + isSold)
                                     fbs.getFire().collection("pieces")
-                                            .document(documentReference.getId())
-                                            .update("pieceId", documentReference.getId())
+                                            .document(generatedId)
+                                            .update(
+                                                    "pieceId", generatedId,
+                                                    "isSold", false
+                                            )
                                             .addOnSuccessListener(aVoid -> {
                                                 Toast.makeText(requireContext(), "Art piece added successfully", Toast.LENGTH_LONG).show();
                                                 btAddPieceFragment.setEnabled(true);
                                                 gotoAllPieces();
                                             })
                                             .addOnFailureListener(e -> {
-                                                Toast.makeText(getActivity(), "Failed to update pieceId: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getActivity(), "Failed to update details: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                                 btAddPieceFragment.setEnabled(true);
                                             });
+
                                 });
+
                     }).addOnFailureListener(e -> {
                         Toast.makeText(getActivity(), "Failed to get download URL: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         btAddPieceFragment.setEnabled(true);
                     });
+
                 })
                 .addOnFailureListener(e -> {
                     // Handle unsuccessful uploads

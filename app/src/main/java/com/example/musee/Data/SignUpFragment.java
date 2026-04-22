@@ -1,4 +1,4 @@
-package com.example.musee;
+package com.example.musee.Data;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.musee.Fragments.AllPiecesFragment;
+import com.example.musee.R;
 import com.example.musee.classes.FirebaseServices;
 import com.example.musee.classes.User;
 import com.example.musee.classes.UtilsClass;
@@ -110,10 +112,13 @@ public class SignUpFragment extends Fragment {
         etAddressSignUp = getView().findViewById(R.id.etAddressSignUp);
 
         imgUserSignUp = getView().findViewById(R.id.imgUserSignUp);
+        /*
         if (selectedImage != null) {
             imgUserSignUp.setImageURI(selectedImage);
             fbs.setSelectedImageURL(selectedImage);
         }
+
+         */
 
         imgUserSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,8 +182,10 @@ public class SignUpFragment extends Fragment {
                 // SignUp
                 Uri selectedImageUri = fbs.getSelectedImageURL();
                 String imageURL = "";
-                if (selectedImageUri != null) {
-                    imageURL = selectedImageUri.toString();
+                imgUserSignUp = getView().findViewById(R.id.imgUserSignUp);
+
+                if (selectedImage != null) {
+                    imgUserSignUp.setImageURI(selectedImage);
                 }
 
                 // فحص اذا اسم المستخدم موجود بالفعل
@@ -260,9 +267,15 @@ public class SignUpFragment extends Fragment {
 
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == getActivity().RESULT_OK && data != null) {
             selectedImage = data.getData();
-            imgUserSignUp.setImageURI(selectedImage);
-            fbs.setSelectedImageURL(selectedImage); // حفظ الصورة المختارة
 
+            // 1. عرض الصورة في الـ ImageView
+            imgUserSignUp.setImageURI(selectedImage);
+
+            // 2. هذه الخطوة هامة جداً: إزالة اللون البني (tint) برمجياً عند اختيار صورة
+            imgUserSignUp.setImageTintList(null);
+
+            // 3. حفظ الصورة في كلاس الخدمات
+            fbs.setSelectedImageURL(selectedImage);
         }
     }
 }

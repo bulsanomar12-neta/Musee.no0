@@ -1,6 +1,7 @@
-package com.example.musee;
+package com.example.musee.Fragments;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -21,8 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.musee.classes.User;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.musee.MainActivity;
+import com.example.musee.R;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 
@@ -141,7 +142,7 @@ public class PieceDetailsFragment extends Fragment {
         if (args != null) {
             myPiece = args.getParcelable("pieces");
             if (myPiece != null) {
-                tvArtNamePieceDetails.setText(myPiece.getArtistName());
+                tvArtNamePieceDetails.setText(myPiece.getname());
                 tvSizePieceDetails.setText(myPiece.getSize());
                 tvInformationPieceDetails.setText(myPiece.getInformation());
                 tvArtistNamePieceDetails.setText(myPiece.getArtistName());
@@ -153,26 +154,29 @@ public class PieceDetailsFragment extends Fragment {
                 } else {
                     Picasso.get().load(myPiece.getPhoto()).into(imgPieceDetails);
                 }
+
                 //  برمجة زر الإيميل
-                btEmailPieceDetailsFragment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String artName = myPiece.getArtistName(); // استخراج الاسم من الكائن مباشرة
-                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-                        intent.setData(Uri.parse("mailto:"));
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"gallery@example.com"});
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "Inquiry about: " + artName);
-                        intent.putExtra(Intent.EXTRA_TEXT, "Hello, I am interested in your artwork: " + artName);
+                btEmailPieceDetailsFragment.setOnClickListener(v -> {
+                    String artName = myPiece.getname();
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:gallery@example.com"));
 
-                        try {
-                            startActivity(Intent.createChooser(intent, "Send Email..."));
-                        } catch (Exception e) {
-                            Toast.makeText(getActivity(), "No Email app found", Toast.LENGTH_SHORT).show();
-                        }
+                    intent.putExtra(Intent.EXTRA_SUBJECT,
+                            "Inquiry about: " + artName);
+
+                    intent.putExtra(Intent.EXTRA_TEXT,
+                            "Hello, I am interested in your artwork: " + artName);
+
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(getActivity(),
+                                "No email app found",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
-                //  برمجة زر الشراء
+                //  برمجة زر الشراء - النسخة المصححة لضمان عدم إنشاء مستندات مكررة
                 btAddtocartlPieceDetailsFragment.setOnClickListener(v -> {
                     FirebaseUser user = fbs.getAuth().getCurrentUser();
                     if (user == null) {
@@ -180,45 +184,14 @@ public class PieceDetailsFragment extends Fragment {
                         return;
                     }
 
-                    fbs.getFire().collection("userPiecesCart")
-                            .add(myPiece) // إضافة myPiece كمستند جديد
-                            .addOnSuccessListener(documentReference -> { // ★ نحصل على documentReference
-                                //  استخدام الـ documentReference للحصول على الـ ID الحقيقي
-                                String pieceDocId = documentReference.getId(); // ★ ID الفعلي للقطعة في Firestore
-
-                                // تحديث مصفوفة cartPieces في مستند المستخدم
-                                fbs.getFire().collection("users")
-                                        .document(user.getUid())
-                                        .update("userPiecesCart", FieldValue.arrayUnion(pieceDocId)) // ★ نضيف الـ ID إلى cart المستخدم
-                                        .addOnSuccessListener(unused -> {
-                                            Toast.makeText(getActivity(), myPiece.getArtistName() + " added to cart!", Toast.LENGTH_SHORT).show();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(getActivity(), "Failed to add to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        });
-
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(getActivity(), "Failed to save piece to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-                });
-
-         /// /////////////////////////////////////////////////////////////////////////////////////////////////
-                btAddtocartlPieceDetailsFragment.setOnClickListener(v -> {
-                    FirebaseUser user = fbs.getAuth().getCurrentUser();
-                    if (user == null) {
-                        Toast.makeText(getActivity(), "Login first", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // خذ الـ ID مباشرة من myPiece
-                    String pieceId = myPiece.getPieceId(); // ← هذا هو ID المستند
+                    // نستخدم الـ ID الخاص باللوحة الأصلية لربطها بسلة المستخدم
+                    String pieceId = myPiece.getPieceId();
                     if (pieceId == null || pieceId.isEmpty()) {
                         Toast.makeText(getActivity(), "Piece ID is missing!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // أضف الـ ID إلى Cart
+                    // إضافة معرف اللوحة إلى سلة المستخدم في قاعدة البيانات
                     fbs.getFire().collection("users")
                             .document(user.getUid())
                             .update("userPiecesCart", FieldValue.arrayUnion(pieceId))
@@ -229,19 +202,29 @@ public class PieceDetailsFragment extends Fragment {
                                 Toast.makeText(getActivity(), "Failed to add to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                 });
-            /// /////////////////////////////////////////////////////////////////////////////////////////////
 
-               // زر الرجوع (يجب أن يكون خارج زر Add to Cart)
+                // زر الرجوع (يجب أن يكون خارج زر Add to Cart)
                 btnBackFromDetailsToAll.setOnClickListener(v -> {
 
-                    if (getActivity() == null)
-                        return;
+                    if (getActivity() == null) return;
+
+                    String from = getArguments() != null
+                            ? getArguments().getString("from", "all")
+                            : "all";
 
                     MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.gotoAllPiecesFragment();
 
-                });
-            }
+                    if (from.equals("home")) {
+                        mainActivity.gotoUserHomeFragment();
+
+                    } else if (from.equals("checkout")) {
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                        // أو mainActivity.gotoCheckOutFragment() حسب نظامك
+
+                    } else {
+                        mainActivity.gotoAllPiecesFragment();
+                    }
+                });            }
         }
     }
 }

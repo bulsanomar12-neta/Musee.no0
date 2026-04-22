@@ -16,6 +16,7 @@ public class PieceClass implements Parcelable {
     private String photo;
     private String currentUsereMail;
     private String pieceId;
+    private boolean isSold;
 
 
     public PieceClass()
@@ -32,8 +33,10 @@ public class PieceClass implements Parcelable {
         this.photo = photo;
         this.currentUsereMail = currentUsereMail;
         this.pieceId = null;
+        this.isSold = false; // افتراضياً اللوحة غير مباعة
     }
 
+    // تحديث Parcelable (مهم جداً لنقل البيانات بين الصفحات)
     protected PieceClass(Parcel in) {
         name = in.readString();
         category = in.readString();
@@ -44,7 +47,8 @@ public class PieceClass implements Parcelable {
         price = in.readString();
         photo = in.readString();
         currentUsereMail = in.readString();
-        pieceId = null;
+        pieceId = in.readString();
+        isSold = in.readByte() != 0; // قراءة البولين
     }
 
 
@@ -69,6 +73,8 @@ public class PieceClass implements Parcelable {
     public String getPrice() {return price;}
     public String getPhoto(){return photo;}
     public String getCurrentUsereMail() {return currentUsereMail;}
+    public boolean isSold() { return isSold; }
+    public void setSold(boolean sold) { isSold = sold; }
 
 
     // 2️⃣ أضف getter و setter
@@ -100,14 +106,16 @@ public class PieceClass implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(category);
         dest.writeString(artistName);
+        dest.writeString(hours);
         dest.writeString(size);
         dest.writeString(information);
-        dest.writeString(hours);
-        dest.writeString(category);
         dest.writeString(price);
         dest.writeString(photo);
         dest.writeString(currentUsereMail);
+        dest.writeString(pieceId);
+        dest.writeByte((byte) (isSold ? 1 : 0)); // كتابة البولين
     }
 
     @Override

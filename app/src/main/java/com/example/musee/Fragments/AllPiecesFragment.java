@@ -1,4 +1,4 @@
-package com.example.musee;
+package com.example.musee.Fragments;
 
 import android.os.Bundle;
 
@@ -23,7 +23,9 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.musee.classes.AllPiecesAdapter;
+import com.example.musee.MainActivity;
+import com.example.musee.R;
+import com.example.musee.Adapters.AllPiecesAdapter;
 import com.example.musee.classes.FirebaseServices;
 import com.example.musee.classes.PieceClass;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,7 +35,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -230,63 +231,62 @@ public class AllPiecesFragment extends Fragment {
         myAdapter.setOnItemClickListener(new AllPiecesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // Handle item click here
-                ///String selectedItem = pieces.get(position).getArtistName();
-                //String selectedItem = filteredList.get(position).getArtistName(); // CHANGE
-                //Toast.makeText(getActivity(), "Clicked: " + selectedItem, Toast.LENGTH_LONG).show();
                 PieceClass selectedPiece = filteredList.get(position);
 
-                // إعداد البيانات للتمرير إلى Fragment التفاصيل
                 Bundle args = new Bundle();
-                args.putParcelable("pieces", selectedPiece);           // تمرير الكائن نفسه
-                args.putString("pieceDocId", selectedPiece.getPieceId()); // ← تمرير الـ ID
+                args.putParcelable("pieces", selectedPiece);
+                // الآن selectedPiece.getPieceId() لن يكون Null
+                args.putString("pieceDocId", selectedPiece.getPieceId());
+                args.putString("from", "all");
 
-                // إنشاء Fragment التفاصيل
                 PieceDetailsFragment fragment = new PieceDetailsFragment();
                 fragment.setArguments(args);
 
-                // استبدال Fragment الحالي
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.frameLayOutMain, fragment);
+                ft.addToBackStack(null); // يفضل إضافتها لكي يستطيع المستخدم العودة للمعرض
                 ft.commit();
             }
         });
     }
 
-    public ArrayList<PieceClass> getPieces()
-    {
-        ArrayList<PieceClass> pieces = new ArrayList<>();
+    public ArrayList<PieceClass> getPieces() {
+        ArrayList<PieceClass> piecesList = new ArrayList<>();
 
         try {
-            pieces.clear();
+            // إضافة شرط .whereEqualTo("isSold", false) لفلترة اللوحات المباعة
             fbs.getFire().collection("pieces")
+                    .whereEqualTo("isSold", false)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
+                                piecesList.clear();
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    pieces.add(document.toObject(PieceClass.class));
+                                    PieceClass piece = document.toObject(PieceClass.class);
+
+                                    // مهم جداً: تعيين الـ ID الخاص بالوثيقة داخل الكائن
+                                    piece.setPieceId(document.getId());
+
+                                    piecesList.add(piece);
                                 }
-                                filteredList.clear();        // CHANGE
-                                filteredList.addAll(pieces); // CHANGE
-                                myAdapter.notifyDataSetChanged(); // CHANGE
 
-
-                                ///AllPiecesAdapter adapter = new AllPiecesAdapter(getActivity(), pieces);
-                                ///rvAllPiecesFragment.setAdapter(adapter);
+                                // تحديث القائمة المفلترة والـ Adapter
+                                filteredList.clear();
+                                filteredList.addAll(piecesList);
+                                myAdapter.notifyDataSetChanged();
                             } else {
-                                //Log.e("AllRestActivity: readData()", "Error getting documents.", task.getException());
+                                Log.e("AllPiecesFragment", "Error getting documents: ", task.getException());
                             }
                         }
                     });
         }
-        catch (Exception e)
-        {
-            Log.e("getCompaniesMap(): ", e.getMessage());
+        catch (Exception e) {
+            Log.e("getPieces Error: ", e.getMessage());
         }
 
-        return pieces;
+        return piecesList;
     }
 
     private void showNoDataDialogue() {

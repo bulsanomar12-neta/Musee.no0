@@ -1,4 +1,4 @@
-package com.example.musee;
+package com.example.musee.Data;
 
 import android.Manifest;
 import android.app.Activity;
@@ -25,6 +25,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.musee.MainActivity;
+import com.example.musee.R;
 import com.example.musee.classes.FirebaseServices;
 import com.example.musee.classes.User;
 import com.example.musee.classes.UtilsClass;
